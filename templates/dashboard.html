@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Energy-Aware LLM Scheduler</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <script src="{{ url_for('static', filename='chart.umd.min.js') }}"></script>
+</head>
+<body>
+
+  <!-- HERO -->
+  <section class="hero">
+    <canvas id="heroCanvas"></canvas>
+    <div class="hero-content">
+      <span class="eyebrow eyebrow-light">Cloud Computing · Course Project</span>
+      <h1>Energy-Aware LLM<br>Inference Scheduling</h1>
+      <p class="hero-subtitle">A naive round-robin scheduler vs. a smarter energy-aware scheduler — simulated across a heterogeneous GPU fleet, measured in real energy saved.</p>
+      <a href="#dashboard" class="scroll-cue" aria-label="Scroll to dashboard">
+        <span></span>
+      </a>
+    </div>
+  </section>
+
+  <!-- DASHBOARD -->
+  <main id="dashboard">
+    <p id="savings-summary" class="summary-badge reveal">Loading comparison…</p>
+
+    <section class="chart-card reveal">
+      <h2 class="chart-title">Per-GPU Total Energy to Finish Workload</h2>
+      <canvas id="totalEnergyChart" width="600" height="300"></canvas>
+    </section>
+
+    <section class="chart-card reveal">
+      <h2 class="chart-title">Per-GPU Instantaneous Power Draw</h2>
+      <canvas id="energyChart" width="600" height="300"></canvas>
+    </section>
+
+    <section class="chart-card reveal">
+      <h2 class="chart-title">Per-GPU Load Distribution</h2>
+      <canvas id="loadChart" width="600" height="300"></canvas>
+    </section>
+
+    <footer class="page-footer">
+      <p>Synthetic trace simulation · Round-Robin vs. Energy-Aware scheduling</p>
+    </footer>
+  </main>
+
+  <script src="{{ url_for('static', filename='dashboard.js') }}"></script>
+  <script src="{{ url_for('static', filename='animations.js') }}"></script>
+</body>
+</html>

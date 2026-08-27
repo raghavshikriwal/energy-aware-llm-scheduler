@@ -1,0 +1,702 @@
+[
+  {
+    "request_id": "req_1",
+    "arrival_time": "2026-08-26T18:49:59.234815",
+    "input_tokens": 101,
+    "output_tokens": 809,
+    "priority": "medium"
+  },
+  {
+    "request_id": "req_2",
+    "arrival_time": "2026-08-26T18:50:00.534785",
+    "input_tokens": 335,
+    "output_tokens": 804,
+    "priority": "low"
+  },
+  {
+    "request_id": "req_3",
+    "arrival_time": "2026-08-26T18:50:03.950612",
+    "input_tokens": 1877,
+    "output_tokens": 608,
+    "priority": "low"
+  },
+  {
+    "request_id": "req_4",
+    "arrival_time": "2026-08-26T18:50:06.944025",
+    "input_tokens": 115,
+    "output_tokens": 80,
+    "priority": "low"
+  },
+  {
+    "request_id": "req_5",
+    "arrival_time": "2026-08-26T18:50:08.115351",
+    "input_tokens": 1084,
+    "output_tokens": 666,
+    "priority": "low"
+  },
+  {
+    "request_id": "req_6",
+    "arrival_time": "2026-08-26T18:50:10.965452",
+    "input_tokens": 1516,
+    "output_tokens": 715,
+    "priority": "high"
+  },
+  {
+    "request_id": "req_7",
+    "arrival_time": "2026-08-26T18:50:13.735665",
+    "input_tokens": 501,
+    "output_tokens": 509,
+    "priority": "high"
+  },
+  {
+    "request_id": "req_8",
+    "arrival_time": "2026-08-26T18:50:15.198799",
+    "input_tokens": 1830,
+    "output_tokens": 56,
+    "priority": "low"
+  },
+  {
+    "request_id": "req_9",
+    "arrival_time": "2026-08-26T18:50:18.719682",
+    "input_tokens": 746,
+    "output_tokens": 334,
+    "priority": "low"
+  },
+  {
+    "request_id": "req_10",
+    "arrival_time": "2026-08-26T18:50:19.874719",
+    "input_tokens": 1613,
+    "output_tokens": 394,
+    "priority": "low"
+  },
+  {
+    "request_id": "req_11",
+    "arrival_time": "2026-08-26T18:50:20.429174",
+    "input_tokens": 248,
+    "output_tokens": 417,
+    "priority": "medium"
+  },
+  {
+    "request_id": "req_12",
+    "arrival_time": "2026-08-26T18:50:23.487432",
+    "input_tokens": 1702,
+    "output_tokens": 94,
+    "priority": "high"
+  },
+  {
+    "request_id": "req_13",
+    "arrival_time": "2026-08-26T18:50:25.838614",
+    "input_tokens": 305,
+    "output_tokens": 994,
+    "priority": "medium"
+  },
+  {
+    "request_id": "req_14",
+    "arrival_time": "2026-08-26T18:50:26.324735",
+    "input_tokens": 650,
+    "output_tokens": 899,
+    "priority": "high"
+  },
+  {
+    "request_id": "req_15",
+    "arrival_time": "2026-08-26T18:50:29.455482",
+    "input_tokens": 1814,
+    "output_tokens": 420,
+    "priority": "high"
+  },
+  {
+    "request_id": "req_16",
+    "arrival_time": "2026-08-26T18:50:30.497696",
+    "input_tokens": 192,
+    "output_tokens": 96,
+    "priority": "high"
+  },
+  {
+    "request_id": "req_17",
+    "arrival_time": "2026-08-26T18:50:31.714398",
+    "input_tokens": 642,
+    "output_tokens": 131,
+    "priority": "low"
+  },
+  {
+    "request_id": "req_18",
+    "arrival_time": "2026-08-26T18:50:36.060168",
+    "input_tokens": 828,
+    "output_tokens": 334,
+    "priority": "medium"
+  },
+  {
+    "request_id": "req_19",
+    "arrival_time": "2026-08-26T18:50:39.275022",
+    "input_tokens": 797,
+    "output_tokens": 216,
+    "priority": "medium"
+  },
+  {
+    "request_id": "req_20",
+    "arrival_time": "2026-08-26T18:50:41.115848",
+    "input_tokens": 1422,
+    "output_tokens": 323,
+    "priority": "high"
+  },
+  {
+    "request_id": "req_21",
+    "arrival_time": "2026-08-26T18:50:45.805455",
+    "input_tokens": 1377,
+    "output_tokens": 123,
+    "priority": "high"
+  },
+  {
+    "request_id": "req_22",
+    "arrival_time": "2026-08-26T18:50:49.016849",
+    "input_tokens": 1143,
+    "output_tokens": 796,
+    "priority": "low"
+  },
+  {
+    "request_id": "req_23",
+    "arrival_time": "2026-08-26T18:50:49.917521",
+    "input_tokens": 827,
+    "output_tokens": 326,
+    "priority": "high"
+  },
+  {
+    "request_id": "req_24",
+    "arrival_time": "2026-08-26T18:50:53.389515",
+    "input_tokens": 499,
+    "output_tokens": 751,
+    "priority": "medium"
+  },
+  {
+    "request_id": "req_25",
+    "arrival_time": "2026-08-26T18:50:57.619489",
+    "input_tokens": 1639,
+    "output_tokens": 107,
+    "priority": "low"
+  },
+  {
+    "request_id": "req_26",
+    "arrival_time": "2026-08-26T18:51:01.746322",
+    "input_tokens": 1698,
+    "output_tokens": 373,
+    "priority": "medium"
+  },
+  {
+    "request_id": "req_27",
+    "arrival_time": "2026-08-26T18:51:03.158252",
+    "input_tokens": 482,
+    "output_tokens": 985,
+    "priority": "high"
+  },
+  {
+    "request_id": "req_28",
+    "arrival_time": "2026-08-26T18:51:07.552453",
+    "input_tokens": 694,
+    "output_tokens": 267,
+    "priority": "high"
+  },
+  {
+    "request_id": "req_29",
+    "arrival_time": "2026-08-26T18:51:10.098686",
+    "input_tokens": 1861,
+    "output_tokens": 986,
+    "priority": "high"
+  },
+  {
+    "request_id": "req_30",
+    "arrival_time": "2026-08-26T18:51:12.447060",
+    "input_tokens": 592,
+    "output_tokens": 192,
+    "priority": "low"
+  },
+  {
+    "request_id": "req_31",
+    "arrival_time": "2026-08-26T18:51:16.197506",
+    "input_tokens": 1153,
+    "output_tokens": 319,
+    "priority": "high"
+  },
+  {
+    "request_id": "req_32",
+    "arrival_time": "2026-08-26T18:51:19.161977",
+    "input_tokens": 1888,
+    "output_tokens": 647,
+    "priority": "medium"
+  },
+  {
+    "request_id": "req_33",
+    "arrival_time": "2026-08-26T18:51:21.035760",
+    "input_tokens": 333,
+    "output_tokens": 571,
+    "priority": "medium"
+  },
+  {
+    "request_id": "req_34",
+    "arrival_time": "2026-08-26T18:51:21.581216",
+    "input_tokens": 146,
+    "output_tokens": 931,
+    "priority": "low"
+  },
+  {
+    "request_id": "req_35",
+    "arrival_time": "2026-08-26T18:51:22.430138",
+    "input_tokens": 377,
+    "output_tokens": 861,
+    "priority": "high"
+  },
+  {
+    "request_id": "req_36",
+    "arrival_time": "2026-08-26T18:51:24.598722",
+    "input_tokens": 180,
+    "output_tokens": 444,
+    "priority": "medium"
+  },
+  {
+    "request_id": "req_37",
+    "arrival_time": "2026-08-26T18:51:27.618575",
+    "input_tokens": 1008,
+    "output_tokens": 591,
+    "priority": "medium"
+  },
+  {
+    "request_id": "req_38",
+    "arrival_time": "2026-08-26T18:51:32.476859",
+    "input_tokens": 1812,
+    "output_tokens": 61,
+    "priority": "high"
+  },
+  {
+    "request_id": "req_39",
+    "arrival_time": "2026-08-26T18:51:36.108396",
+    "input_tokens": 1446,
+    "output_tokens": 956,
+    "priority": "high"
+  },
+  {
+    "request_id": "req_40",
+    "arrival_time": "2026-08-26T18:51:39.887697",
+    "input_tokens": 1624,
+    "output_tokens": 706,
+    "priority": "medium"
+  },
+  {
+    "request_id": "req_41",
+    "arrival_time": "2026-08-26T18:51:40.534303",
+    "input_tokens": 940,
+    "output_tokens": 211,
+    "priority": "medium"
+  },
+  {
+    "request_id": "req_42",
+    "arrival_time": "2026-08-26T18:51:40.650205",
+    "input_tokens": 1528,
+    "output_tokens": 946,
+    "priority": "high"
+  },
+  {
+    "request_id": "req_43",
+    "arrival_time": "2026-08-26T18:51:42.040811",
+    "input_tokens": 1075,
+    "output_tokens": 830,
+    "priority": "low"
+  },
+  {
+    "request_id": "req_44",
+    "arrival_time": "2026-08-26T18:51:44.628451",
+    "input_tokens": 267,
+    "output_tokens": 941,
+    "priority": "high"
+  },
+  {
+    "request_id": "req_45",
+    "arrival_time": "2026-08-26T18:51:46.190830",
+    "input_tokens": 1358,
+    "output_tokens": 569,
+    "priority": "high"
+  },
+  {
+    "request_id": "req_46",
+    "arrival_time": "2026-08-26T18:51:47.265494",
+    "input_tokens": 815,
+    "output_tokens": 830,
+    "priority": "low"
+  },
+  {
+    "request_id": "req_47",
+    "arrival_time": "2026-08-26T18:51:50.008451",
+    "input_tokens": 1644,
+    "output_tokens": 994,
+    "priority": "high"
+  },
+  {
+    "request_id": "req_48",
+    "arrival_time": "2026-08-26T18:51:54.609069",
+    "input_tokens": 1276,
+    "output_tokens": 381,
+    "priority": "medium"
+  },
+  {
+    "request_id": "req_49",
+    "arrival_time": "2026-08-26T18:51:54.804505",
+    "input_tokens": 1952,
+    "output_tokens": 421,
+    "priority": "medium"
+  },
+  {
+    "request_id": "req_50",
+    "arrival_time": "2026-08-26T18:51:56.077821",
+    "input_tokens": 543,
+    "output_tokens": 949,
+    "priority": "high"
+  },
+  {
+    "request_id": "req_51",
+    "arrival_time": "2026-08-26T18:52:00.817873",
+    "input_tokens": 225,
+    "output_tokens": 799,
+    "priority": "medium"
+  },
+  {
+    "request_id": "req_52",
+    "arrival_time": "2026-08-26T18:52:04.916387",
+    "input_tokens": 1607,
+    "output_tokens": 595,
+    "priority": "low"
+  },
+  {
+    "request_id": "req_53",
+    "arrival_time": "2026-08-26T18:52:05.645505",
+    "input_tokens": 1023,
+    "output_tokens": 612,
+    "priority": "low"
+  },
+  {
+    "request_id": "req_54",
+    "arrival_time": "2026-08-26T18:52:07.044282",
+    "input_tokens": 1836,
+    "output_tokens": 671,
+    "priority": "medium"
+  },
+  {
+    "request_id": "req_55",
+    "arrival_time": "2026-08-26T18:52:11.869660",
+    "input_tokens": 1952,
+    "output_tokens": 602,
+    "priority": "high"
+  },
+  {
+    "request_id": "req_56",
+    "arrival_time": "2026-08-26T18:52:15.350011",
+    "input_tokens": 1510,
+    "output_tokens": 369,
+    "priority": "medium"
+  },
+  {
+    "request_id": "req_57",
+    "arrival_time": "2026-08-26T18:52:20.326243",
+    "input_tokens": 1380,
+    "output_tokens": 432,
+    "priority": "medium"
+  },
+  {
+    "request_id": "req_58",
+    "arrival_time": "2026-08-26T18:52:24.834352",
+    "input_tokens": 974,
+    "output_tokens": 173,
+    "priority": "low"
+  },
+  {
+    "request_id": "req_59",
+    "arrival_time": "2026-08-26T18:52:26.035369",
+    "input_tokens": 742,
+    "output_tokens": 71,
+    "priority": "high"
+  },
+  {
+    "request_id": "req_60",
+    "arrival_time": "2026-08-26T18:52:28.849584",
+    "input_tokens": 1255,
+    "output_tokens": 275,
+    "priority": "low"
+  },
+  {
+    "request_id": "req_61",
+    "arrival_time": "2026-08-26T18:52:29.297450",
+    "input_tokens": 1342,
+    "output_tokens": 110,
+    "priority": "low"
+  },
+  {
+    "request_id": "req_62",
+    "arrival_time": "2026-08-26T18:52:29.727712",
+    "input_tokens": 114,
+    "output_tokens": 930,
+    "priority": "medium"
+  },
+  {
+    "request_id": "req_63",
+    "arrival_time": "2026-08-26T18:52:30.174913",
+    "input_tokens": 537,
+    "output_tokens": 335,
+    "priority": "high"
+  },
+  {
+    "request_id": "req_64",
+    "arrival_time": "2026-08-26T18:52:32.653444",
+    "input_tokens": 1154,
+    "output_tokens": 185,
+    "priority": "high"
+  },
+  {
+    "request_id": "req_65",
+    "arrival_time": "2026-08-26T18:52:37.337464",
+    "input_tokens": 1219,
+    "output_tokens": 640,
+    "priority": "medium"
+  },
+  {
+    "request_id": "req_66",
+    "arrival_time": "2026-08-26T18:52:38.628150",
+    "input_tokens": 1018,
+    "output_tokens": 876,
+    "priority": "medium"
+  },
+  {
+    "request_id": "req_67",
+    "arrival_time": "2026-08-26T18:52:39.661159",
+    "input_tokens": 248,
+    "output_tokens": 724,
+    "priority": "medium"
+  },
+  {
+    "request_id": "req_68",
+    "arrival_time": "2026-08-26T18:52:41.497217",
+    "input_tokens": 891,
+    "output_tokens": 528,
+    "priority": "high"
+  },
+  {
+    "request_id": "req_69",
+    "arrival_time": "2026-08-26T18:52:41.862656",
+    "input_tokens": 1388,
+    "output_tokens": 711,
+    "priority": "low"
+  },
+  {
+    "request_id": "req_70",
+    "arrival_time": "2026-08-26T18:52:42.259658",
+    "input_tokens": 1541,
+    "output_tokens": 397,
+    "priority": "low"
+  },
+  {
+    "request_id": "req_71",
+    "arrival_time": "2026-08-26T18:52:43.578074",
+    "input_tokens": 439,
+    "output_tokens": 599,
+    "priority": "medium"
+  },
+  {
+    "request_id": "req_72",
+    "arrival_time": "2026-08-26T18:52:44.364967",
+    "input_tokens": 425,
+    "output_tokens": 335,
+    "priority": "medium"
+  },
+  {
+    "request_id": "req_73",
+    "arrival_time": "2026-08-26T18:52:45.689019",
+    "input_tokens": 1940,
+    "output_tokens": 127,
+    "priority": "medium"
+  },
+  {
+    "request_id": "req_74",
+    "arrival_time": "2026-08-26T18:52:49.748328",
+    "input_tokens": 1803,
+    "output_tokens": 613,
+    "priority": "low"
+  },
+  {
+    "request_id": "req_75",
+    "arrival_time": "2026-08-26T18:52:50.096211",
+    "input_tokens": 1157,
+    "output_tokens": 906,
+    "priority": "low"
+  },
+  {
+    "request_id": "req_76",
+    "arrival_time": "2026-08-26T18:52:54.944293",
+    "input_tokens": 1947,
+    "output_tokens": 821,
+    "priority": "low"
+  },
+  {
+    "request_id": "req_77",
+    "arrival_time": "2026-08-26T18:52:55.859217",
+    "input_tokens": 1044,
+    "output_tokens": 542,
+    "priority": "low"
+  },
+  {
+    "request_id": "req_78",
+    "arrival_time": "2026-08-26T18:53:00.196004",
+    "input_tokens": 1898,
+    "output_tokens": 110,
+    "priority": "low"
+  },
+  {
+    "request_id": "req_79",
+    "arrival_time": "2026-08-26T18:53:02.152972",
+    "input_tokens": 849,
+    "output_tokens": 321,
+    "priority": "medium"
+  },
+  {
+    "request_id": "req_80",
+    "arrival_time": "2026-08-26T18:53:03.650693",
+    "input_tokens": 1476,
+    "output_tokens": 798,
+    "priority": "high"
+  },
+  {
+    "request_id": "req_81",
+    "arrival_time": "2026-08-26T18:53:06.993862",
+    "input_tokens": 1046,
+    "output_tokens": 208,
+    "priority": "low"
+  },
+  {
+    "request_id": "req_82",
+    "arrival_time": "2026-08-26T18:53:08.547730",
+    "input_tokens": 169,
+    "output_tokens": 643,
+    "priority": "high"
+  },
+  {
+    "request_id": "req_83",
+    "arrival_time": "2026-08-26T18:53:11.304486",
+    "input_tokens": 1581,
+    "output_tokens": 371,
+    "priority": "low"
+  },
+  {
+    "request_id": "req_84",
+    "arrival_time": "2026-08-26T18:53:11.650183",
+    "input_tokens": 1026,
+    "output_tokens": 564,
+    "priority": "high"
+  },
+  {
+    "request_id": "req_85",
+    "arrival_time": "2026-08-26T18:53:12.521603",
+    "input_tokens": 1090,
+    "output_tokens": 132,
+    "priority": "low"
+  },
+  {
+    "request_id": "req_86",
+    "arrival_time": "2026-08-26T18:53:12.957358",
+    "input_tokens": 189,
+    "output_tokens": 741,
+    "priority": "low"
+  },
+  {
+    "request_id": "req_87",
+    "arrival_time": "2026-08-26T18:53:15.035858",
+    "input_tokens": 1978,
+    "output_tokens": 961,
+    "priority": "high"
+  },
+  {
+    "request_id": "req_88",
+    "arrival_time": "2026-08-26T18:53:16.342313",
+    "input_tokens": 1267,
+    "output_tokens": 90,
+    "priority": "high"
+  },
+  {
+    "request_id": "req_89",
+    "arrival_time": "2026-08-26T18:53:16.844032",
+    "input_tokens": 1396,
+    "output_tokens": 647,
+    "priority": "high"
+  },
+  {
+    "request_id": "req_90",
+    "arrival_time": "2026-08-26T18:53:19.505667",
+    "input_tokens": 1964,
+    "output_tokens": 317,
+    "priority": "low"
+  },
+  {
+    "request_id": "req_91",
+    "arrival_time": "2026-08-26T18:53:22.887324",
+    "input_tokens": 693,
+    "output_tokens": 294,
+    "priority": "medium"
+  },
+  {
+    "request_id": "req_92",
+    "arrival_time": "2026-08-26T18:53:24.926675",
+    "input_tokens": 1425,
+    "output_tokens": 710,
+    "priority": "medium"
+  },
+  {
+    "request_id": "req_93",
+    "arrival_time": "2026-08-26T18:53:27.267075",
+    "input_tokens": 1952,
+    "output_tokens": 819,
+    "priority": "low"
+  },
+  {
+    "request_id": "req_94",
+    "arrival_time": "2026-08-26T18:53:27.412721",
+    "input_tokens": 1322,
+    "output_tokens": 626,
+    "priority": "low"
+  },
+  {
+    "request_id": "req_95",
+    "arrival_time": "2026-08-26T18:53:27.871699",
+    "input_tokens": 486,
+    "output_tokens": 568,
+    "priority": "medium"
+  },
+  {
+    "request_id": "req_96",
+    "arrival_time": "2026-08-26T18:53:28.620736",
+    "input_tokens": 764,
+    "output_tokens": 952,
+    "priority": "low"
+  },
+  {
+    "request_id": "req_97",
+    "arrival_time": "2026-08-26T18:53:33.029160",
+    "input_tokens": 806,
+    "output_tokens": 341,
+    "priority": "low"
+  },
+  {
+    "request_id": "req_98",
+    "arrival_time": "2026-08-26T18:53:35.276264",
+    "input_tokens": 1162,
+    "output_tokens": 770,
+    "priority": "medium"
+  },
+  {
+    "request_id": "req_99",
+    "arrival_time": "2026-08-26T18:53:38.373485",
+    "input_tokens": 1702,
+    "output_tokens": 719,
+    "priority": "high"
+  },
+  {
+    "request_id": "req_100",
+    "arrival_time": "2026-08-26T18:53:38.511818",
+    "input_tokens": 1723,
+    "output_tokens": 617,
+    "priority": "medium"
+  }
+]
