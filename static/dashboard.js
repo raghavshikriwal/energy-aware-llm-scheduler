@@ -47,8 +47,6 @@ async function loadComparison(customConfig = null) {
     renderPowerChart(data);
     renderLoadChart(data);
 
-    // On first load, seed the sliders from the server's default GPU
-    // config so the UI always starts in sync with the backend.
     if (!customConfig) {
       buildGpuControls(data.round_robin.gpus);
     }
