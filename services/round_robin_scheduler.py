@@ -119,9 +119,14 @@ def make_gpus(
     ]
 
 
-def round_robin_schedule(requests: list[dict], num_gpus: int = 4) -> list[GPUNode]:
+def round_robin_schedule(
+    requests: list[dict],
+    num_gpus: int = 4,
+    efficiency_factors: list[float] | None = None,
+    compute_capabilities: list[float] | None = None,
+) -> list[GPUNode]:
     """Assign requests to GPUs in cyclic order, ignoring load, efficiency, and speed."""
-    gpus = make_gpus(num_gpus)
+    gpus = make_gpus(num_gpus, efficiency_factors, compute_capabilities)
     for i, request in enumerate(requests):
         gpus[i % num_gpus].assign(request)
     return gpus

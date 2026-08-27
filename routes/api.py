@@ -2,11 +2,16 @@
 
 from __future__ import annotations
 
-from flask import Blueprint, jsonify
+from flask import Blueprint, jsonify, request
 
 from models.database import get_recent_runs, save_comparison_run
 from services.energy_aware_scheduler import energy_aware_schedule
-from services.round_robin_scheduler import load_trace, round_robin_schedule
+from services.round_robin_scheduler import (
+    DEFAULT_COMPUTE_CAPABILITIES,
+    DEFAULT_EFFICIENCY_FACTORS,
+    load_trace,
+    round_robin_schedule,
+)
 
 api = Blueprint("api", __name__, url_prefix="/api")
 
@@ -27,15 +32,62 @@ def _gpu_summary(gpus) -> list[dict]:
     ]
 
 
-@api.route("/compare")
+def _parse_custom_gpu_config():
+    """Read optional custom GPU parameters from the POST JSON body.
+
+    Falls back to the module defaults for anything not provided, so this
+    endpoint keeps working exactly as before if the caller sends nothing.
+    Returns (efficiency_factors, compute_capabilities, num_gpus).
+    """
+    body = request.get_json(silent=True) or {}
+
+    efficiency_factors = body.get("efficiency_factors") or DEFAULT_EFFICIENCY_FACTORS
+    compute_capabilities = body.get("compute_capabilities") or DEFAULT_COMPUTE_CAPABILITIES
+
+    # Basic validation — reject obviously broken input rather than letting
+    # it silently produce nonsense (e.g. divide-by-zero speed).
+    if not isinstance(efficiency_factors, list) or not all(
+        isinstance(x, (int, float)) and x > 0 for x in efficiency_factors
+    ):
+        raise ValueError("efficiency_factors must be a list of positive numbers")
+
+    if not isinstance(compute_capabilities, list) or not all(
+        isinstance(x, (int, float)) and x > 0 for x in compute_capabilities
+    ):
+        raise ValueError("compute_capabilities must be a list of positive numbers")
+
+    if len(efficiency_factors) != len(compute_capabilities):
+        raise ValueError("efficiency_factors and compute_capabilities must be the same length")
+
+    num_gpus = body.get("num_gpus") or len(efficiency_factors)
+
+    return efficiency_factors, compute_capabilities, num_gpus
+
+
+@api.route("/compare", methods=["GET", "POST"])
 def compare():
     try:
-        requests = load_trace()
+        requests_trace = load_trace()
     except FileNotFoundError as e:
         return jsonify({"error": str(e)}), 404
 
-    rr_gpus = round_robin_schedule(requests, num_gpus=4)
-    ea_gpus = energy_aware_schedule(requests, num_gpus=4)
+    try:
+        efficiency_factors, compute_capabilities, num_gpus = _parse_custom_gpu_config()
+    except ValueError as e:
+        return jsonify({"error": str(e)}), 400
+
+    rr_gpus = round_robin_schedule(
+        requests_trace,
+        num_gpus=num_gpus,
+        efficiency_factors=efficiency_factors,
+        compute_capabilities=compute_capabilities,
+    )
+    ea_gpus = energy_aware_schedule(
+        requests_trace,
+        num_gpus=num_gpus,
+        efficiency_factors=efficiency_factors,
+        compute_capabilities=compute_capabilities,
+    )
 
     # Instantaneous power snapshot (kept for the "current load" view)
     rr_power_total = sum(gpu.energy_watts for gpu in rr_gpus)
@@ -54,14 +106,18 @@ def compare():
     rr_gpu_summary = _gpu_summary(rr_gpus)
     ea_gpu_summary = _gpu_summary(ea_gpus)
 
-    # Persist this run so it shows up in /api/history
-    save_comparison_run(
-        energy_savings_pct=round(savings_pct, 2),
-        round_robin_total_wh=round(rr_energy_total, 4),
-        energy_aware_total_wh=round(ea_energy_total, 4),
-        round_robin_gpus=rr_gpu_summary,
-        energy_aware_gpus=ea_gpu_summary,
-    )
+    # Persist this run so it shows up in /api/history.
+    # Only save on POST (an explicit user-triggered "Run Comparison"),
+    # not on every GET page-load, to avoid flooding the DB with duplicate
+    # rows from the dashboard's initial fetch.
+    if request.method == "POST":
+        save_comparison_run(
+            energy_savings_pct=round(savings_pct, 2),
+            round_robin_total_wh=round(rr_energy_total, 4),
+            energy_aware_total_wh=round(ea_energy_total, 4),
+            round_robin_gpus=rr_gpu_summary,
+            energy_aware_gpus=ea_gpu_summary,
+        )
 
     return jsonify({
         "round_robin": {

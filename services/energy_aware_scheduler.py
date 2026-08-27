@@ -69,9 +69,14 @@ def _cost(gpu: GPUNode, added_load: int, avg_load: float) -> float:
     return marginal_energy_wh + BALANCE_PENALTY_WEIGHT * imbalance
 
 
-def energy_aware_schedule(requests: list[dict], num_gpus: int = 4) -> list[GPUNode]:
+def energy_aware_schedule(
+    requests: list[dict],
+    num_gpus: int = 4,
+    efficiency_factors: list[float] | None = None,
+    compute_capabilities: list[float] | None = None,
+) -> list[GPUNode]:
     """Assign each request to the GPU with the lowest marginal energy cost."""
-    gpus = make_gpus(num_gpus)
+    gpus = make_gpus(num_gpus, efficiency_factors, compute_capabilities)
 
     for request in requests:
         added_load = request["input_tokens"] + request["output_tokens"]

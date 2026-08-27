@@ -30,19 +30,39 @@
   <main id="dashboard">
     <p id="savings-summary" class="summary-badge reveal">Loading comparison…</p>
 
+    <section class="chart-card reveal" id="controls-panel">
+      <div class="controls-header">
+        <div>
+          <h2 class="chart-title">Try Your Own GPU Fleet</h2>
+          <p class="controls-hint">Adjust each GPU's power efficiency and processing speed, then re-run the simulation live.</p>
+        </div>
+        <button id="run-comparison-btn" class="run-btn">
+          <span class="run-btn-label">Run Comparison</span>
+          <span class="run-btn-spinner" aria-hidden="true"></span>
+        </button>
+      </div>
+      <div class="gpu-controls" id="gpu-controls"></div>
+    </section>
+
     <section class="chart-card reveal">
       <h2 class="chart-title">Per-GPU Total Energy to Finish Workload</h2>
-      <canvas id="totalEnergyChart" width="600" height="300"></canvas>
+      <div class="chart-wrap">
+        <canvas id="totalEnergyChart"></canvas>
+      </div>
     </section>
 
     <section class="chart-card reveal">
       <h2 class="chart-title">Per-GPU Instantaneous Power Draw</h2>
-      <canvas id="energyChart" width="600" height="300"></canvas>
+      <div class="chart-wrap">
+        <canvas id="energyChart"></canvas>
+      </div>
     </section>
 
     <section class="chart-card reveal">
       <h2 class="chart-title">Per-GPU Load Distribution</h2>
-      <canvas id="loadChart" width="600" height="300"></canvas>
+      <div class="chart-wrap">
+        <canvas id="loadChart"></canvas>
+      </div>
     </section>
 
     <footer class="page-footer">
