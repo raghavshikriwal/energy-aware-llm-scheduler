@@ -1,174 +1,258 @@
-/* ---- Controls panel ---- */
+/* ================= PREMIUM REDESIGN ADDITIONS ================= */
 
-.controls-header {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
+/* ---- Choice / landing nav section ---- */
+
+.choice-section {
+  position: relative;
+  overflow: hidden;
+  background: #0b0f0d;
+  color: #f5f3ee;
+  padding: 6rem 2rem 7rem;
+  text-align: center;
+}
+
+.choice-glow {
+  position: absolute;
+  top: 0; left: 0;
+  width: 480px;
+  height: 480px;
+  margin-left: -240px;
+  margin-top: -240px;
+  background: radial-gradient(circle, rgba(39,174,96,0.25) 0%, rgba(39,174,96,0) 70%);
+  pointer-events: none;
+  transition: transform 0.05s linear;
+  will-change: transform;
+}
+
+.choice-eyebrow {
+  display: inline-block;
+  font-size: 0.8rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #c9a769;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+}
+
+.choice-heading {
+  font-family: 'Fraunces', Georgia, serif;
+  font-size: clamp(2.2rem, 5vw, 3.4rem);
+  font-weight: 600;
+  margin: 0 0 3rem;
+}
+
+.choice-grid {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   gap: 1.5rem;
-  flex-wrap: wrap;
-  margin-bottom: 1.5rem;
+  max-width: 1100px;
+  margin: 0 auto;
 }
 
-.controls-hint {
-  color: #6b7280;
-  font-size: 0.92rem;
-  margin: 0.35rem 0 0;
-  max-width: 46ch;
+.choice-card {
+  position: relative;
+  display: block;
+  text-align: left;
+  background: linear-gradient(160deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02));
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 16px;
+  padding: 1.75rem 1.5rem;
+  text-decoration: none;
+  color: inherit;
+  transition: transform 0.15s ease, border-color 0.15s ease;
+  transform-style: preserve-3d;
 }
 
-.gpu-controls {
+.choice-card:hover {
+  border-color: rgba(39,174,96,0.5);
+}
+
+.choice-index {
+  display: block;
+  font-family: 'Fraunces', Georgia, serif;
+  font-size: 0.85rem;
+  color: #c9a769;
+  margin-bottom: 1rem;
+  letter-spacing: 0.05em;
+}
+
+.choice-card h3 {
+  font-family: 'Fraunces', Georgia, serif;
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin: 0 0 0.6rem;
+}
+
+.choice-card p {
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: rgba(245,243,238,0.7);
+  margin: 0 0 1.25rem;
+}
+
+.choice-arrow {
+  display: inline-block;
+  font-size: 1.1rem;
+  color: #27ae60;
+  transition: transform 0.15s ease;
+}
+
+.choice-card:hover .choice-arrow {
+  transform: translateX(4px);
+}
+
+/* ---- Info sections (How It Works, Author) ---- */
+
+.info-section {
+  padding: 5rem 2rem;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.info-section-alt {
+  background: #f9fafb;
+  max-width: 100%;
+  border-radius: 0;
+}
+
+.info-eyebrow {
+  display: block;
+  font-size: 0.78rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #27ae60;
+  font-weight: 700;
+  margin-bottom: 0.6rem;
+}
+
+.info-heading {
+  font-family: 'Fraunces', Georgia, serif;
+  font-size: clamp(1.8rem, 4vw, 2.6rem);
+  font-weight: 600;
+  margin: 0 0 2.5rem;
+  color: #1a1a1a;
+}
+
+.info-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 1rem;
+  gap: 2rem;
 }
 
-.gpu-control-card {
-  background: #f9fafb;
-  border: 1px solid #eceff1;
-  border-radius: 12px;
-  padding: 1.1rem 1.2rem 1.3rem;
+.info-block h3 {
+  font-family: 'Fraunces', Georgia, serif;
+  font-size: 1.1rem;
+  margin: 0 0 0.6rem;
+  color: #1a1a1a;
+}
+
+.info-block p {
+  font-size: 0.95rem;
+  line-height: 1.65;
+  color: #4b5563;
+}
+
+.author-bio {
+  font-size: 1.05rem;
+  line-height: 1.75;
+  color: #374151;
+  max-width: 70ch;
+}
+
+.author-link {
+  display: inline-block;
+  margin-top: 1.5rem;
+  color: #27ae60;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.author-link:hover {
+  text-decoration: underline;
+}
+
+/* ---- FAQ widget ---- */
+
+.faq-intro {
+  color: #6b7280;
+  margin: -1.5rem 0 2rem;
+}
+
+.faq-widget {
+  max-width: 640px;
+}
+
+.faq-input-row {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.faq-input {
+  flex: 1;
+  padding: 0.85rem 1.1rem;
+  border-radius: 10px;
+  border: 1px solid #d1d5db;
+  font-size: 0.95rem;
+  font-family: inherit;
+  outline: none;
   transition: border-color 0.15s ease;
 }
 
-.gpu-control-card:hover {
-  border-color: #d7dbe0;
+.faq-input:focus {
+  border-color: #27ae60;
 }
 
-.gpu-control-card h3 {
-  margin: 0 0 0.9rem;
-  font-size: 0.95rem;
-  font-weight: 700;
+.faq-answer {
+  margin-top: 1.25rem;
+  padding: 1.1rem 1.3rem;
+  background: #f0fbf4;
+  border: 1px solid #cdebd8;
+  border-radius: 10px;
+  font-size: 0.92rem;
+  line-height: 1.6;
   color: #1f2937;
 }
 
-.slider-label {
+.faq-answer strong {
+  display: block;
+  color: #1a7a41;
+  margin-bottom: 0.4rem;
+}
+
+.faq-answer p {
+  margin: 0;
+}
+
+.faq-answer-empty {
+  background: #fef2f2;
+  border-color: #fecaca;
+  color: #7f1d1d;
+}
+
+.faq-suggestions {
+  margin-top: 1.25rem;
   display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  font-size: 0.8rem;
-  color: #6b7280;
-  margin-bottom: 0.3rem;
-}
-
-.slider-label .slider-name {
-  font-weight: 500;
-}
-
-.slider-label .val {
-  font-weight: 700;
-  color: #27ae60;
-  font-variant-numeric: tabular-nums;
-}
-
-.slider {
-  width: 100%;
-  appearance: none;
-  height: 5px;
-  border-radius: 999px;
-  background: #e5e7eb;
-  outline: none;
-  margin-bottom: 1rem;
-  cursor: pointer;
-}
-
-.slider::-webkit-slider-thumb {
-  appearance: none;
-  width: 16px;
-  height: 16px;
-  border-radius: 50%;
-  background: #27ae60;
-  border: 2px solid #fff;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.25);
-  cursor: pointer;
-}
-
-.slider::-moz-range-thumb {
-  width: 16px;
-  height: 16px;
-  border-radius: 50%;
-  background: #27ae60;
-  border: 2px solid #fff;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.25);
-  cursor: pointer;
-}
-
-.slider-speed::-webkit-slider-thumb {
-  background: #2980b9;
-}
-
-.slider-speed::-moz-range-thumb {
-  background: #2980b9;
-}
-
-/* ---- Run button ---- */
-
-.run-btn {
-  position: relative;
-  background: #27ae60;
-  color: #fff;
-  border: none;
-  padding: 0.8rem 1.6rem;
-  border-radius: 10px;
-  font-size: 0.95rem;
-  font-weight: 600;
-  font-family: inherit;
-  cursor: pointer;
-  transition: background 0.15s ease, transform 0.1s ease;
-  white-space: nowrap;
-  display: inline-flex;
-  align-items: center;
+  flex-wrap: wrap;
   gap: 0.5rem;
+  align-items: center;
+  font-size: 0.85rem;
+  color: #6b7280;
 }
 
-.run-btn:hover:not(:disabled) {
-  background: #219150;
+.faq-chip {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 999px;
+  padding: 0.4rem 0.9rem;
+  font-size: 0.82rem;
+  cursor: pointer;
+  color: #374151;
+  transition: border-color 0.15s ease, color 0.15s ease;
 }
 
-.run-btn:active:not(:disabled) {
-  transform: scale(0.97);
-}
-
-.run-btn:disabled {
-  cursor: not-allowed;
-  opacity: 0.75;
-}
-
-.run-btn-spinner {
-  display: none;
-  width: 14px;
-  height: 14px;
-  border: 2px solid rgba(255,255,255,0.4);
-  border-top-color: #fff;
-  border-radius: 50%;
-}
-
-.run-btn.is-loading .run-btn-spinner {
-  display: inline-block;
-  animation: spin 0.7s linear infinite;
-}
-
-.run-btn.is-loading .run-btn-label {
-  opacity: 0.85;
-}
-
-@keyframes spin {
-  to { transform: rotate(360deg); }
-}
-
-/* ---- Summary badge states ---- */
-
-#savings-summary.is-updating {
-  opacity: 0.6;
-}
-
-#savings-summary.is-error {
-  color: #c0392b;
-}
-
-/* ---- Chart sizing ---- */
-
-.chart-wrap {
-  position: relative;
-  height: 320px;
-  width: 100%;
+.faq-chip:hover {
+  border-color: #27ae60;
+  color: #27ae60;
 }
