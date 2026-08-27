@@ -47,15 +47,22 @@
         <span class="choice-arrow">→</span>
       </a>
 
-      <a href="#author" class="choice-card" data-tilt>
+      <a href="#methodology" class="choice-card" data-tilt>
         <span class="choice-index">03</span>
+        <h3>Methodology</h3>
+        <p>The exact formulas, assumptions, and limits behind every number.</p>
+        <span class="choice-arrow">→</span>
+      </a>
+
+      <a href="#author" class="choice-card" data-tilt>
+        <span class="choice-index">04</span>
         <h3>Meet the Author</h3>
         <p>Who built this, and why it exists.</p>
         <span class="choice-arrow">→</span>
       </a>
 
       <a href="#faq" class="choice-card" data-tilt>
-        <span class="choice-index">04</span>
+        <span class="choice-index">05</span>
         <h3>FAQ</h3>
         <p>Ask a question, get an instant answer.</p>
         <span class="choice-arrow">→</span>
@@ -123,9 +130,101 @@
     </div>
   </section>
 
+  <!-- METHODOLOGY -->
+  <section class="info-section info-section-alt" id="methodology">
+    <span class="info-eyebrow">02.5 — Methodology</span>
+    <h2 class="info-heading">The math behind the numbers</h2>
+    <p class="author-bio">
+      This isn't a black box. Every number on this page comes from the formulas below, run against a synthetic
+      request trace. Here's exactly what's computed, what's assumed, and where the model's honest limits are.
+    </p>
+
+    <div class="info-grid">
+      <div class="info-block">
+        <h3>Power model</h3>
+        <p>
+          Each GPU's instantaneous power draw scales linearly with its current load, then is scaled by its own
+          efficiency factor:
+        </p>
+        <p><code>power_watts = (50 + 2.0 × load / 100) × efficiency_factor</code></p>
+        <p>
+          Idle draw is fixed at 50W for every GPU; only the load-dependent term and the efficiency multiplier vary
+          across the fleet.
+        </p>
+      </div>
+
+      <div class="info-block">
+        <h3>Throughput &amp; total energy</h3>
+        <p>
+          Completion time depends on a GPU's compute capability relative to a 500 tokens/sec baseline:
+        </p>
+        <p><code>completion_hours = (load / (500 × compute_capability)) / 3600</code></p>
+        <p>
+          Total energy is power integrated over that time — <code>energy_wh = power_watts × completion_hours</code> —
+          which is why a fast-but-power-hungry GPU can still beat a slow-but-efficient one.
+        </p>
+      </div>
+
+      <div class="info-block">
+        <h3>Marginal cost assignment</h3>
+        <p>
+          The energy-aware scheduler never compares whole-workload totals — that grows quadratically and unfairly
+          punishes GPUs already carrying work. Instead, every request is costed as the energy it would
+          <em>add</em>:
+        </p>
+        <p><code>marginal_cost = energy(load + request) − energy(load)</code></p>
+        <p>Each request goes to whichever GPU has the lowest marginal cost at that instant. No lookahead, no global optimization — just a greedy, physically grounded decision made fresh every time.</p>
+      </div>
+    </div>
+
+    <div class="info-grid" style="margin-top: 2rem;">
+      <div class="info-block">
+        <h3>The fleet being simulated</h3>
+        <p>
+          Four GPU classes, deliberately spread apart so the scheduler has a real gap to optimize over — from an
+          old, power-hungry, slow card (0.5× efficiency, 0.5× speed) to a latest-generation card that draws more
+          power at peak but finishes so much faster (2.0× efficiency, 3.0× speed) that its total energy can still
+          come out lower. That's the core "power ≠ energy" idea, made concrete.
+        </p>
+      </div>
+
+      <div class="info-block">
+        <h3>Assumptions</h3>
+        <p>
+          Power scales linearly with load (no idle floors beyond the fixed base, no thermal throttling or DVFS
+          steps). Requests start processing instantly — no queuing delay or transfer overhead. Each GPU's
+          efficiency and speed are fixed for the run, with no degradation over time.
+        </p>
+      </div>
+
+      <div class="info-block">
+        <h3>Current limitations</h3>
+        <p>
+          The load-balance penalty is currently set to zero — this is pure greedy energy minimization, so
+          efficient GPUs can be loaded arbitrarily heavily if that's the cheapest marginal option, which trades
+          off against latency risk. The comparison is against round-robin only (no least-loaded or weighted
+          baseline yet), on a single synthetic trace rather than a real inference log, with no variance reported
+          across multiple runs.
+        </p>
+      </div>
+    </div>
+
+    <p class="author-bio" style="margin-top: 2rem;">
+      <strong>Grounded in current research:</strong> energy-aware LLM serving is an active systems research area.
+      See
+      <a class="author-link" href="https://arxiv.org/abs/2606.30391" target="_blank" rel="noopener">Festina (2026)</a>
+      on profiling-guided energy control for serverless LLM serving,
+      <a class="author-link" href="https://arxiv.org/pdf/2408.05235" target="_blank" rel="noopener">throttLL'eM</a>
+      on SLO-aware GPU frequency scaling, and
+      <a class="author-link" href="https://arxiv.org/pdf/2407.04014" target="_blank" rel="noopener">this workload-based energy modeling study</a>
+      for heterogeneous LLM inference systems — the same "power ≠ energy, minimize the marginal cost" ideas this
+      project explores at a smaller, teachable scale.
+    </p>
+  </section>
+
   <!-- AUTHOR -->
-  <section class="info-section info-section-alt" id="author">
-    <span class="info-eyebrow">03 — The Author</span>
+  <section class="info-section" id="author">
+    <span class="info-eyebrow">04 — The Author</span>
     <h2 class="info-heading">Built by Raghav Shikriwal</h2>
     <p class="author-bio">
       BTech IT student at NSUT, building this as a Cloud Computing course project — and turning it into something worth actually shipping. The goal wasn't just to hit a savings percentage, but to get the underlying model right: finding and fixing a subtle bug where the cost function scaled quadratically instead of marginally, then rebuilding the scheduler, API, and interface around the corrected logic.
@@ -137,7 +236,7 @@
 
   <!-- FAQ -->
   <section class="info-section" id="faq">
-    <span class="info-eyebrow">04 — FAQ</span>
+    <span class="info-eyebrow">05 — FAQ</span>
     <h2 class="info-heading">Ask a question</h2>
     <p class="faq-intro">Type anything about the project — how it works, why it matters, what's under the hood.</p>
 
