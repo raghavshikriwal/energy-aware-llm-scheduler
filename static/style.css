@@ -1,24 +1,161 @@
-/* ================= PREMIUM REDESIGN ADDITIONS ================= */
+/* ============================================================
+   BASE / RESET
+   ============================================================ */
 
-/* ---- Choice / landing nav section ---- */
+* {
+  box-sizing: border-box;
+}
+
+:root {
+  --color-bg: #ffffff;
+  --color-ink: #111417;
+  --color-ink-soft: #4b5563;
+  --color-muted: #6b7280;
+  --color-accent: #27ae60;
+  --color-accent-dark: #1a7a41;
+  --color-accent-soft: #e9f8ef;
+  --color-gold: #c9a769;
+  --color-orange: #e67e22;
+  --color-border: #e5e7eb;
+  --color-dark-bg: #0b0f0d;
+  --color-dark-ink: #f5f3ee;
+  --font-display: 'Fraunces', Georgia, serif;
+  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --radius-md: 12px;
+  --radius-lg: 20px;
+  --shadow-soft: 0 4px 24px rgba(17, 20, 23, 0.06);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  color: var(--color-ink);
+  background: var(--color-bg);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3 {
+  font-family: var(--font-display);
+  line-height: 1.15;
+  margin: 0;
+}
+
+a {
+  color: inherit;
+}
+
+/* ============================================================
+   HERO
+   ============================================================ */
+
+.hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  background: radial-gradient(ellipse at top left, #10221a 0%, var(--color-dark-bg) 60%);
+  color: var(--color-dark-ink);
+}
+
+#heroCanvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  opacity: 0.9;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 1;
+  max-width: 900px;
+  padding: 0 clamp(1.5rem, 6vw, 6rem);
+}
+
+.eyebrow {
+  display: inline-block;
+  font-size: 0.8rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+}
+
+.eyebrow-light {
+  color: var(--color-gold);
+}
+
+.hero h1 {
+  font-size: clamp(2.6rem, 6vw, 4.6rem);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  margin-bottom: 1.75rem;
+}
+
+.hero-subtitle {
+  font-size: clamp(1.05rem, 1.6vw, 1.3rem);
+  color: rgba(245, 243, 238, 0.78);
+  max-width: 60ch;
+  margin-bottom: 3rem;
+}
+
+.scroll-cue {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 64px;
+  border: 2px solid rgba(245, 243, 238, 0.35);
+  border-radius: 999px;
+  position: relative;
+  text-decoration: none;
+}
+
+.scroll-cue span {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--color-accent);
+  position: absolute;
+  top: 12px;
+  animation: scrollCue 1.6s ease-in-out infinite;
+}
+
+@keyframes scrollCue {
+  0%   { top: 12px; opacity: 1; }
+  70%  { top: 38px; opacity: 0.2; }
+  100% { top: 38px; opacity: 0; }
+}
+
+/* ============================================================
+   CHOICE / LANDING NAV SECTION
+   ============================================================ */
 
 .choice-section {
   position: relative;
   overflow: hidden;
-  background: #0b0f0d;
-  color: #f5f3ee;
+  background: var(--color-dark-bg);
+  color: var(--color-dark-ink);
   padding: 6rem 2rem 7rem;
   text-align: center;
 }
 
 .choice-glow {
   position: absolute;
-  top: 0; left: 0;
+  top: 0;
+  left: 0;
   width: 480px;
   height: 480px;
   margin-left: -240px;
   margin-top: -240px;
-  background: radial-gradient(circle, rgba(39,174,96,0.25) 0%, rgba(39,174,96,0) 70%);
+  background: radial-gradient(circle, rgba(39, 174, 96, 0.25) 0%, rgba(39, 174, 96, 0) 70%);
   pointer-events: none;
   transition: transform 0.05s linear;
   will-change: transform;
@@ -29,13 +166,12 @@
   font-size: 0.8rem;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: #c9a769;
+  color: var(--color-gold);
   font-weight: 600;
   margin-bottom: 0.75rem;
 }
 
 .choice-heading {
-  font-family: 'Fraunces', Georgia, serif;
   font-size: clamp(2.2rem, 5vw, 3.4rem);
   font-weight: 600;
   margin: 0 0 3rem;
@@ -55,8 +191,8 @@
   position: relative;
   display: block;
   text-align: left;
-  background: linear-gradient(160deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02));
-  border: 1px solid rgba(255,255,255,0.1);
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 16px;
   padding: 1.75rem 1.5rem;
   text-decoration: none;
@@ -66,20 +202,19 @@
 }
 
 .choice-card:hover {
-  border-color: rgba(39,174,96,0.5);
+  border-color: rgba(39, 174, 96, 0.5);
 }
 
 .choice-index {
   display: block;
-  font-family: 'Fraunces', Georgia, serif;
+  font-family: var(--font-display);
   font-size: 0.85rem;
-  color: #c9a769;
+  color: var(--color-gold);
   margin-bottom: 1rem;
   letter-spacing: 0.05em;
 }
 
 .choice-card h3 {
-  font-family: 'Fraunces', Georgia, serif;
   font-size: 1.3rem;
   font-weight: 600;
   margin: 0 0 0.6rem;
@@ -88,14 +223,14 @@
 .choice-card p {
   font-size: 0.9rem;
   line-height: 1.5;
-  color: rgba(245,243,238,0.7);
+  color: rgba(245, 243, 238, 0.7);
   margin: 0 0 1.25rem;
 }
 
 .choice-arrow {
   display: inline-block;
   font-size: 1.1rem;
-  color: #27ae60;
+  color: var(--color-accent);
   transition: transform 0.15s ease;
 }
 
@@ -103,7 +238,225 @@
   transform: translateX(4px);
 }
 
-/* ---- Info sections (How It Works, Author) ---- */
+/* ============================================================
+   DASHBOARD MAIN
+   ============================================================ */
+
+#dashboard {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 5rem 2rem;
+}
+
+.reveal {
+  opacity: 1;
+  transform: none;
+}
+
+.summary-badge {
+  font-size: 1.15rem;
+  font-weight: 500;
+  color: var(--color-ink);
+  background: var(--color-accent-soft);
+  border: 1px solid #cdebd8;
+  border-radius: var(--radius-md);
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 2rem;
+  transition: opacity 0.2s ease;
+}
+
+.summary-badge.is-updating {
+  opacity: 0.6;
+}
+
+.summary-badge.is-error {
+  color: #7f1d1d;
+  background: #fef2f2;
+  border-color: #fecaca;
+}
+
+.chart-card {
+  background: #fff;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-soft);
+  padding: 2rem clamp(1.25rem, 3vw, 2.5rem);
+  margin-bottom: 2rem;
+}
+
+.chart-title {
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  color: var(--color-ink);
+}
+
+.chart-wrap {
+  position: relative;
+  height: 320px;
+  width: 100%;
+}
+
+/* ---- Controls panel ---- */
+
+.controls-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.5rem;
+}
+
+.controls-hint {
+  color: var(--color-muted);
+  font-size: 0.92rem;
+  margin: 0.35rem 0 0;
+  max-width: 46ch;
+}
+
+.gpu-controls {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+}
+
+.gpu-control-card {
+  background: #f9fafb;
+  border: 1px solid #eceff1;
+  border-radius: var(--radius-md);
+  padding: 1.1rem 1.2rem 1.3rem;
+  transition: border-color 0.15s ease;
+}
+
+.gpu-control-card:hover {
+  border-color: #d7dbe0;
+}
+
+.gpu-control-card h3 {
+  margin: 0 0 0.9rem;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--color-ink);
+}
+
+.slider-label {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-size: 0.8rem;
+  color: var(--color-muted);
+  margin-bottom: 0.3rem;
+}
+
+.slider-label .slider-name {
+  font-weight: 500;
+}
+
+.slider-label .val {
+  font-weight: 700;
+  color: var(--color-accent);
+  font-variant-numeric: tabular-nums;
+}
+
+.slider {
+  width: 100%;
+  appearance: none;
+  height: 5px;
+  border-radius: 999px;
+  background: #e5e7eb;
+  outline: none;
+  margin-bottom: 1rem;
+  cursor: pointer;
+}
+
+.slider::-webkit-slider-thumb {
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--color-accent);
+  border: 2px solid #fff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+  cursor: pointer;
+}
+
+.slider::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--color-accent);
+  border: 2px solid #fff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+  cursor: pointer;
+}
+
+.slider-speed::-webkit-slider-thumb {
+  background: #2980b9;
+}
+
+.slider-speed::-moz-range-thumb {
+  background: #2980b9;
+}
+
+/* ---- Run button ---- */
+
+.run-btn {
+  position: relative;
+  background: var(--color-accent);
+  color: #fff;
+  border: none;
+  padding: 0.8rem 1.6rem;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background 0.15s ease, transform 0.1s ease;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.run-btn:hover:not(:disabled) {
+  background: var(--color-accent-dark);
+}
+
+.run-btn:active:not(:disabled) {
+  transform: scale(0.97);
+}
+
+.run-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.75;
+}
+
+.run-btn-spinner {
+  display: none;
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  border-top-color: #fff;
+  border-radius: 50%;
+}
+
+.run-btn.is-loading .run-btn-spinner {
+  display: inline-block;
+  animation: spin 0.7s linear infinite;
+}
+
+.run-btn.is-loading .run-btn-label {
+  opacity: 0.85;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ============================================================
+   INFO SECTIONS (How It Works, Author)
+   ============================================================ */
 
 .info-section {
   padding: 5rem 2rem;
@@ -114,7 +467,6 @@
 .info-section-alt {
   background: #f9fafb;
   max-width: 100%;
-  border-radius: 0;
 }
 
 .info-eyebrow {
@@ -122,13 +474,12 @@
   font-size: 0.78rem;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: #27ae60;
+  color: var(--color-accent);
   font-weight: 700;
   margin-bottom: 0.6rem;
 }
 
 .info-heading {
-  font-family: 'Fraunces', Georgia, serif;
   font-size: clamp(1.8rem, 4vw, 2.6rem);
   font-weight: 600;
   margin: 0 0 2.5rem;
@@ -142,7 +493,6 @@
 }
 
 .info-block h3 {
-  font-family: 'Fraunces', Georgia, serif;
   font-size: 1.1rem;
   margin: 0 0 0.6rem;
   color: #1a1a1a;
@@ -151,20 +501,20 @@
 .info-block p {
   font-size: 0.95rem;
   line-height: 1.65;
-  color: #4b5563;
+  color: var(--color-ink-soft);
 }
 
 .author-bio {
   font-size: 1.05rem;
   line-height: 1.75;
-  color: #374151;
+  color: var(--color-ink-soft);
   max-width: 70ch;
 }
 
 .author-link {
   display: inline-block;
   margin-top: 1.5rem;
-  color: #27ae60;
+  color: var(--color-accent);
   font-weight: 600;
   text-decoration: none;
 }
@@ -173,10 +523,12 @@
   text-decoration: underline;
 }
 
-/* ---- FAQ widget ---- */
+/* ============================================================
+   FAQ WIDGET
+   ============================================================ */
 
 .faq-intro {
-  color: #6b7280;
+  color: var(--color-muted);
   margin: -1.5rem 0 2rem;
 }
 
@@ -201,13 +553,13 @@
 }
 
 .faq-input:focus {
-  border-color: #27ae60;
+  border-color: var(--color-accent);
 }
 
 .faq-answer {
   margin-top: 1.25rem;
   padding: 1.1rem 1.3rem;
-  background: #f0fbf4;
+  background: var(--color-accent-soft);
   border: 1px solid #cdebd8;
   border-radius: 10px;
   font-size: 0.92rem;
@@ -217,7 +569,7 @@
 
 .faq-answer strong {
   display: block;
-  color: #1a7a41;
+  color: var(--color-accent-dark);
   margin-bottom: 0.4rem;
 }
 
@@ -238,12 +590,12 @@
   gap: 0.5rem;
   align-items: center;
   font-size: 0.85rem;
-  color: #6b7280;
+  color: var(--color-muted);
 }
 
 .faq-chip {
   background: #fff;
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--color-border);
   border-radius: 999px;
   padding: 0.4rem 0.9rem;
   font-size: 0.82rem;
@@ -253,6 +605,17 @@
 }
 
 .faq-chip:hover {
-  border-color: #27ae60;
-  color: #27ae60;
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+
+.page-footer {
+  text-align: center;
+  padding: 3rem 2rem 4rem;
+  color: var(--color-muted);
+  font-size: 0.85rem;
 }
