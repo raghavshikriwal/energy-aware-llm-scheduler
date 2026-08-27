@@ -619,3 +619,27 @@ a {
   color: var(--color-muted);
   font-size: 0.85rem;
 }
+
+/* ============================================================
+   METHODOLOGY FORMULA CODE BLOCKS
+   ============================================================ */
+
+.info-block code,
+.author-bio code {
+  display: inline-block;
+  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+  font-size: 0.88em;
+  background: var(--color-accent-soft);
+  border: 1px solid #cdebd8;
+  color: var(--color-accent-dark);
+  padding: 0.35rem 0.75rem;
+  border-radius: 8px;
+  margin: 0.35rem 0;
+  line-height: 1.5;
+  overflow-x: auto;
+  max-width: 100%;
+}
+
+.info-block p:has(> code:only-child) {
+  margin: 0.9rem 0;
+}
