@@ -42,23 +42,6 @@ This was confirmed empirically: widening the efficiency/speed gap between the be
 
 ## Architecture
 
-├── app.py # Flask app entry point
-├── models/
-│ └── database.py # SQLite persistence layer
-├── routes/
-│ └── api.py # /api/compare, /api/history
-├── services/
-│ ├── round_robin_scheduler.py # Baseline scheduler + shared GPUNode model
-│ └── energy_aware_scheduler.py # Energy-aware scheduler (imports from round_robin_scheduler)
-├── utils/
-│ └── trace_generator.py # Synthetic LLM request trace generator
-├── templates/
-│ └── dashboard.html
-└── static/
-├── dashboard.js # Fetches /api/compare, renders charts
-├── animations.js # Hero particle background + scroll reveal
-├── style.css
-└── chart.umd.min.js # Chart.js, served locally (not via CDN)
 
 `energy_aware_scheduler.py` imports its `GPUNode` dataclass and shared utilities directly from `round_robin_scheduler.py` — there is no duplicated scheduling infrastructure between the two schedulers.
 
