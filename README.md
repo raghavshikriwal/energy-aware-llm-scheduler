@@ -89,3 +89,6 @@ Then open `http://127.0.0.1:5000`.
 ## Author
 
 Raghav Shikriwal — BTech IT, NSUT
+
+## LIVE LINK BELOW
+https://energy-aware-llm-scheduler.onrender.com
