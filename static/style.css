@@ -718,6 +718,43 @@ a {
   background: rgba(248, 113, 113, 0.1);
   border-color: rgba(248, 113, 113, 0.3);
 }
+.secondary-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem;
+  margin-bottom: 0.75rem;
+}
+
+.secondary-stat {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: var(--radius-md);
+  padding: 1rem 1.25rem;
+  text-align: center;
+}
+
+.secondary-stat-value {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: var(--color-accent);
+  margin-bottom: 0.25rem;
+}
+
+.secondary-stat-label {
+  display: block;
+  font-size: 0.78rem;
+  color: var(--color-text-muted, #9aa39a);
+  letter-spacing: 0.01em;
+}
+
+.scale-disclaimer {
+  font-size: 0.75rem;
+  color: var(--color-text-muted, #7d867d);
+  margin-bottom: 2rem;
+  line-height: 1.5;
+}
 
 .chart-card {
   position: relative;
@@ -1249,4 +1286,4 @@ a {
     opacity: 1;
     transform: none;
   }
-}
+}s

@@ -6,14 +6,28 @@ from flask import Blueprint, jsonify, request
 
 from models.database import get_recent_runs, save_comparison_run
 from services.energy_aware_scheduler import energy_aware_schedule
+from services.least_loaded_scheduler import least_loaded_schedule
 from services.round_robin_scheduler import (
     DEFAULT_COMPUTE_CAPABILITIES,
     DEFAULT_EFFICIENCY_FACTORS,
     load_trace,
     round_robin_schedule,
 )
+from services.sensitivity import run_sensitivity_sweep
 
 api = Blueprint("api", __name__, url_prefix="/api")
+
+# --- Illustrative cost/carbon conversion ------------------------------------
+# These are rough, clearly-labeled reference figures (US average grid), used
+# only to make an abstract Wh number tangible. They are NOT a claim about any
+# specific data center's actual electricity contract or grid mix.
+USD_PER_KWH: float = 0.12
+KG_CO2_PER_KWH: float = 0.417
+
+# How many times larger a real production fleet might be than this demo's
+# 4-GPU / 100-request trace, purely for the "at scale" projection shown in
+# the UI. Labeled explicitly as an extrapolation, not a measurement.
+SCALE_PROJECTION_MULTIPLIER: float = 10_000
 
 
 def _gpu_summary(gpus) -> list[dict]:
@@ -82,6 +96,12 @@ def compare():
         efficiency_factors=efficiency_factors,
         compute_capabilities=compute_capabilities,
     )
+    ll_gpus = least_loaded_schedule(
+        requests_trace,
+        num_gpus=num_gpus,
+        efficiency_factors=efficiency_factors,
+        compute_capabilities=compute_capabilities,
+    )
     ea_gpus = energy_aware_schedule(
         requests_trace,
         num_gpus=num_gpus,
@@ -91,10 +111,12 @@ def compare():
 
     # Instantaneous power snapshot (kept for the "current load" view)
     rr_power_total = sum(gpu.energy_watts for gpu in rr_gpus)
+    ll_power_total = sum(gpu.energy_watts for gpu in ll_gpus)
     ea_power_total = sum(gpu.energy_watts for gpu in ea_gpus)
 
     # Total energy to finish the workload — the physically meaningful metric
     rr_energy_total = sum(gpu.total_energy_wh for gpu in rr_gpus)
+    ll_energy_total = sum(gpu.total_energy_wh for gpu in ll_gpus)
     ea_energy_total = sum(gpu.total_energy_wh for gpu in ea_gpus)
 
     savings_pct = (
@@ -102,9 +124,23 @@ def compare():
         if rr_energy_total
         else 0.0
     )
+    savings_vs_least_loaded_pct = (
+        (ll_energy_total - ea_energy_total) / ll_energy_total * 100
+        if ll_energy_total
+        else 0.0
+    )
 
     rr_gpu_summary = _gpu_summary(rr_gpus)
+    ll_gpu_summary = _gpu_summary(ll_gpus)
     ea_gpu_summary = _gpu_summary(ea_gpus)
+
+    # Illustrative cost/carbon framing at a hypothetical production scale.
+    # Explicitly labeled as a linear extrapolation of this demo trace, not a
+    # measurement of any real deployment.
+    wh_saved_vs_rr = rr_energy_total - ea_energy_total
+    projected_kwh_saved = (wh_saved_vs_rr * SCALE_PROJECTION_MULTIPLIER) / 1000
+    projected_usd_saved = projected_kwh_saved * USD_PER_KWH
+    projected_kg_co2_saved = projected_kwh_saved * KG_CO2_PER_KWH
 
     # Persist this run so it shows up in /api/history.
     # Only save on POST (an explicit user-triggered "Run Comparison"),
@@ -125,13 +161,58 @@ def compare():
             "total_energy_watts": round(rr_power_total, 2),
             "total_energy_wh": round(rr_energy_total, 4),
         },
+        "least_loaded": {
+            "gpus": ll_gpu_summary,
+            "total_energy_watts": round(ll_power_total, 2),
+            "total_energy_wh": round(ll_energy_total, 4),
+        },
         "energy_aware": {
             "gpus": ea_gpu_summary,
             "total_energy_watts": round(ea_power_total, 2),
             "total_energy_wh": round(ea_energy_total, 4),
         },
         "energy_savings_pct": round(savings_pct, 2),
+        "energy_savings_vs_least_loaded_pct": round(savings_vs_least_loaded_pct, 2),
+        "at_scale_projection": {
+            "note": (
+                f"Illustrative only: linearly scales this trace's Wh savings "
+                f"by {SCALE_PROJECTION_MULTIPLIER:,}x to approximate a "
+                f"production-sized fleet. Not a measurement of any real "
+                f"deployment."
+            ),
+            "multiplier": SCALE_PROJECTION_MULTIPLIER,
+            "kwh_saved": round(projected_kwh_saved, 2),
+            "usd_saved": round(projected_usd_saved, 2),
+            "kg_co2_saved": round(projected_kg_co2_saved, 2),
+        },
     })
+
+
+@api.route("/sensitivity")
+def sensitivity():
+    """Sweep fleet heterogeneity and return savings % at each level.
+
+    This is the data behind the "savings scale with heterogeneity" chart —
+    the strongest evidence that the 3% headline number isn't a cherry-picked
+    single point, but part of a consistent, explainable trend.
+    """
+    try:
+        requests_trace = load_trace()
+    except FileNotFoundError as e:
+        return jsonify({"error": str(e)}), 404
+
+    try:
+        efficiency_factors, compute_capabilities, num_gpus = _parse_custom_gpu_config()
+    except ValueError as e:
+        return jsonify({"error": str(e)}), 400
+
+    results = run_sensitivity_sweep(
+        requests_trace,
+        num_gpus=num_gpus,
+        base_efficiency_factors=efficiency_factors,
+        base_compute_capabilities=compute_capabilities,
+    )
+    return jsonify({"sweep": results})
 
 
 @api.route("/history")

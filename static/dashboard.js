@@ -187,6 +187,103 @@ function renderSummary(data) {
   animateCountUp(document.getElementById('big-stat-number'), magnitude);
 
   updateHeroPreview(data);
+  renderSecondaryStats(data);
+}
+
+// Renders the three supporting stats under the headline number: savings
+// against the *stronger* Least-Loaded baseline (not just naive Round-Robin),
+// and an explicitly-labeled at-scale cost/carbon projection so the raw Wh
+// figure means something to a reader without a power-engineering background.
+function renderSecondaryStats(data) {
+  const vsLeastLoadedEl = document.getElementById('stat-vs-least-loaded');
+  const usdEl = document.getElementById('stat-usd');
+  const co2El = document.getElementById('stat-co2');
+  const disclaimerEl = document.getElementById('scale-disclaimer');
+  if (!vsLeastLoadedEl || !usdEl || !co2El) return;
+
+  if (typeof data.energy_savings_vs_least_loaded_pct === 'number') {
+    vsLeastLoadedEl.textContent = `${data.energy_savings_vs_least_loaded_pct.toFixed(2)}%`;
+  }
+
+  const scale = data.at_scale_projection;
+  if (scale) {
+    usdEl.textContent = `$${scale.usd_saved.toLocaleString()}`;
+    co2El.textContent = `${scale.kg_co2_saved.toLocaleString()} kg`;
+    if (disclaimerEl) {
+      disclaimerEl.textContent =
+        `Illustrative: assumes a fleet ${scale.multiplier.toLocaleString()}x the size of this demo trace, ` +
+        `US-average grid pricing ($0.12/kWh) and carbon intensity (0.417 kg CO₂e/kWh). Not a measurement of ` +
+        `any real deployment.`;
+    }
+  }
+}
+
+let sensitivityChartInstance = null;
+
+async function loadSensitivity() {
+  const canvas = document.getElementById('sensitivityChart');
+  if (!canvas) return;
+
+  try {
+    const res = await fetch('/api/sensitivity');
+    if (!res.ok) return;
+    const data = await res.json();
+    renderSensitivityChart(data.sweep);
+  } catch (err) {
+    // Non-critical enhancement — fail silently and leave the section title
+    // + explanation visible without the chart rather than breaking the page.
+  }
+}
+
+function renderSensitivityChart(sweep) {
+  const canvas = document.getElementById('sensitivityChart');
+  if (!canvas || !sweep || !sweep.length) return;
+
+  if (sensitivityChartInstance) sensitivityChartInstance.destroy();
+
+  const labels = sweep.map(pt => `${Math.round(pt.heterogeneity * 100)}%`);
+
+  sensitivityChartInstance = new Chart(canvas, {
+    type: 'line',
+    data: {
+      labels,
+      datasets: [
+        {
+          label: 'Savings vs. Round-Robin',
+          data: sweep.map(pt => pt.savings_vs_round_robin_pct),
+          borderColor: CHART_PALETTE.roundRobin.light,
+          backgroundColor: 'transparent',
+          tension: 0.3,
+          pointRadius: 3,
+        },
+        {
+          label: 'Savings vs. Least-Loaded',
+          data: sweep.map(pt => pt.savings_vs_least_loaded_pct),
+          borderColor: CHART_PALETTE.energyAware.light,
+          backgroundColor: 'transparent',
+          tension: 0.3,
+          pointRadius: 3,
+        },
+      ],
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      scales: {
+        x: {
+          title: { display: true, text: 'Fleet heterogeneity (100% = your configured fleet)' },
+          grid: { color: CHART_GRID_COLOR },
+        },
+        y: {
+          title: { display: true, text: 'Energy savings (%)' },
+          grid: { color: CHART_GRID_COLOR },
+        },
+      },
+      plugins: {
+        legend: { position: 'bottom' },
+      },
+    },
+  });
 }
 
 // Mirrors the same real comparison result into the hero's result preview
@@ -507,3 +604,4 @@ runBtn.addEventListener('click', () => {
 
 loadComparison();
 loadHistory();
+loadSensitivity();

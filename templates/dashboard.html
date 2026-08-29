@@ -135,7 +135,37 @@
     </div>
     <p id="savings-summary" class="summary-badge reveal">Loading comparison…</p>
 
-    <section class="chart-card reveal" id="controls-panel">
+<div class="secondary-stats reveal" id="secondary-stats">
+  <div class="secondary-stat">
+    <span class="secondary-stat-value" id="stat-vs-least-loaded">—</span>
+    <span class="secondary-stat-label">saved vs. Least-Loaded baseline</span>
+  </div>
+  <div class="secondary-stat">
+    <span class="secondary-stat-value" id="stat-usd">—</span>
+    <span class="secondary-stat-label">projected savings at scale</span>
+  </div>
+  <div class="secondary-stat">
+    <span class="secondary-stat-value" id="stat-co2">—</span>
+    <span class="secondary-stat-label">CO₂e avoided at scale</span>
+  </div>
+</div>
+<p class="scale-disclaimer" id="scale-disclaimer"></p>
+
+<section class="chart-card reveal" id="sensitivity-panel">
+  <h2 class="chart-title">Savings Scale With Fleet Heterogeneity</h2>
+  <p class="controls-hint">
+    A single savings percentage for one fleet configuration doesn't say much on its own.
+    This sweeps the GPU fleet from uniform hardware (0%, where no scheduler can beat any
+    other) up through your configured fleet's spread and beyond — showing the energy-aware
+    scheduler's advantage grows predictably as hardware becomes more heterogeneous, against
+    <em>both</em> baselines.
+  </p>
+  <div class="chart-wrap">
+    <canvas id="sensitivityChart"></canvas>
+  </div>
+</section>
+
+<section class="chart-card reveal" id="controls-panel">
       <div class="controls-header">
         <div>
           <h2 class="chart-title">Try Your Own GPU Fleet</h2>
