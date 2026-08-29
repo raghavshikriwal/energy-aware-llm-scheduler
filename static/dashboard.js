@@ -7,7 +7,12 @@ const CHART_PALETTE = {
   energyAware: { dark: '#1f9d55', light: '#6ee7a0' },
 };
 
-const CHART_GRID_COLOR = 'rgba(255, 255, 255, 0.08)';
+const CHART_GLOW = {
+  roundRobin: 'rgba(244, 162, 89, 0.35)',
+  energyAware: 'rgba(99, 242, 154, 0.4)',
+};
+
+const CHART_GRID_COLOR = 'rgba(255, 255, 255, 0.05)';
 const CHART_TEXT_COLOR = '#c3c9c2';
 
 // Chart.js renders text/gridlines in black by default — make it match the
@@ -16,6 +21,26 @@ if (typeof Chart !== 'undefined') {
   Chart.defaults.color = CHART_TEXT_COLOR;
   Chart.defaults.borderColor = CHART_GRID_COLOR;
   Chart.defaults.font.family = "'Inter', -apple-system, BlinkMacSystemFont, sans-serif";
+
+  // Soft drop-shadow behind every bar, colored per dataset, so bars read as
+  // lit objects sitting above the panel instead of flat rectangles pasted
+  // onto it. Chart.js has no built-in shadow support, so this plugin sets
+  // the canvas shadow state right before each dataset's bars are drawn,
+  // then clears it immediately after so gridlines/tooltips stay crisp.
+  const barShadowPlugin = {
+    id: 'barShadow',
+    beforeDatasetDraw(chart, args) {
+      const colorKey = args.index === 0 ? 'roundRobin' : 'energyAware';
+      chart.ctx.save();
+      chart.ctx.shadowColor = CHART_GLOW[colorKey];
+      chart.ctx.shadowBlur = 16;
+      chart.ctx.shadowOffsetY = 8;
+    },
+    afterDatasetDraw(chart) {
+      chart.ctx.restore();
+    },
+  };
+  Chart.register(barShadowPlugin);
 }
 
 // Builds (and caches) a top-to-bottom gradient per canvas+color pair so
@@ -216,6 +241,16 @@ function baseChartOptions(titleText) {
   return {
     responsive: true,
     maintainAspectRatio: false,
+    // Slimmer, more evenly spaced bars read as deliberate data-viz rather
+    // than default-width filler blocks.
+    datasets: {
+      bar: {
+        categoryPercentage: 0.55,
+        barPercentage: 0.85,
+        maxBarThickness: 40,
+        borderSkipped: false,
+      },
+    },
     animation: {
       duration: 800,
       easing: 'easeOutQuart',
@@ -237,8 +272,17 @@ function baseChartOptions(titleText) {
       },
     },
     scales: {
-      y: { beginAtZero: true, grid: { color: CHART_GRID_COLOR }, ticks: { color: CHART_TEXT_COLOR } },
-      x: { grid: { display: false }, ticks: { color: CHART_TEXT_COLOR } },
+      y: {
+        beginAtZero: true,
+        grid: { color: CHART_GRID_COLOR, drawTicks: false },
+        border: { display: false },
+        ticks: { color: CHART_TEXT_COLOR, padding: 10 },
+      },
+      x: {
+        grid: { display: false },
+        border: { display: false },
+        ticks: { color: CHART_TEXT_COLOR, padding: 8 },
+      },
     },
   };
 }
@@ -255,14 +299,14 @@ function renderTotalEnergyChart(data) {
           data: data.round_robin.gpus.map(g => g.total_energy_wh),
           backgroundColor: (ctx) => getBarGradient(ctx.chart, 'roundRobin'),
           hoverBackgroundColor: CHART_PALETTE.roundRobin.light,
-          borderRadius: 4,
+          borderRadius: 10,
         },
         {
           label: 'Energy-Aware (Wh)',
           data: data.energy_aware.gpus.map(g => g.total_energy_wh),
           backgroundColor: (ctx) => getBarGradient(ctx.chart, 'energyAware'),
           hoverBackgroundColor: CHART_PALETTE.energyAware.light,
-          borderRadius: 4,
+          borderRadius: 10,
         },
       ],
     },
@@ -282,14 +326,14 @@ function renderPowerChart(data) {
           data: data.round_robin.gpus.map(g => g.energy_watts),
           backgroundColor: (ctx) => getBarGradient(ctx.chart, 'roundRobin'),
           hoverBackgroundColor: CHART_PALETTE.roundRobin.light,
-          borderRadius: 4,
+          borderRadius: 10,
         },
         {
           label: 'Energy-Aware (W)',
           data: data.energy_aware.gpus.map(g => g.energy_watts),
           backgroundColor: (ctx) => getBarGradient(ctx.chart, 'energyAware'),
           hoverBackgroundColor: CHART_PALETTE.energyAware.light,
-          borderRadius: 4,
+          borderRadius: 10,
         },
       ],
     },
@@ -309,14 +353,14 @@ function renderLoadChart(data) {
           data: data.round_robin.gpus.map(g => g.load),
           backgroundColor: (ctx) => getBarGradient(ctx.chart, 'roundRobin'),
           hoverBackgroundColor: CHART_PALETTE.roundRobin.light,
-          borderRadius: 4,
+          borderRadius: 10,
         },
         {
           label: 'Energy-Aware (tokens)',
           data: data.energy_aware.gpus.map(g => g.load),
           backgroundColor: (ctx) => getBarGradient(ctx.chart, 'energyAware'),
           hoverBackgroundColor: CHART_PALETTE.energyAware.light,
-          borderRadius: 4,
+          borderRadius: 10,
         },
       ],
     },

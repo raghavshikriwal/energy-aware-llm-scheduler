@@ -720,12 +720,46 @@ a {
 }
 
 .chart-card {
+  position: relative;
   background: linear-gradient(145deg, rgba(18, 28, 21, 0.94), rgba(8, 13, 10, 0.96));
   border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-soft);
   padding: 2rem clamp(1.25rem, 3vw, 2.5rem);
   margin-bottom: 2rem;
+  overflow: hidden;
+  transition: transform 0.25s ease-out, border-color 0.25s ease-out, box-shadow 0.25s ease-out;
+}
+
+.chart-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.05), transparent 40%);
+  pointer-events: none;
+}
+
+.chart-card::after {
+  content: "";
+  position: absolute;
+  top: -60%;
+  left: 50%;
+  width: 140%;
+  height: 140%;
+  transform: translateX(-50%);
+  background: radial-gradient(circle, rgba(99, 242, 154, 0.08), transparent 60%);
+  pointer-events: none;
+}
+
+.chart-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(99, 242, 154, 0.25);
+  box-shadow: 0 30px 90px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(99, 242, 154, 0.08);
+}
+
+.chart-card > * {
+  position: relative;
+  z-index: 1;
 }
 
 .chart-title {
@@ -1073,15 +1107,16 @@ a {
   pointer-events: none;
   opacity: 0;
   transform: translate(-50%, calc(-100% - 10px));
-  background: rgba(15, 21, 18, 0.92);
-  backdrop-filter: blur(6px);
-  border: 1px solid rgba(74, 222, 128, 0.3);
-  border-radius: 8px;
-  padding: 0.6rem 0.8rem;
+  background: rgba(10, 16, 12, 0.94);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(99, 242, 154, 0.3);
+  border-radius: 10px;
+  padding: 0.65rem 0.85rem;
   font-family: var(--font-mono);
   font-size: 0.78rem;
   color: var(--color-ink);
   white-space: nowrap;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5);
   transition: opacity 0.1s ease;
   z-index: 5;
 }
