@@ -7,23 +7,39 @@
 }
 
 :root {
-  --color-bg: #ffffff;
-  --color-ink: #111417;
-  --color-ink-soft: #4b5563;
-  --color-muted: #6b7280;
-  --color-accent: #27ae60;
-  --color-accent-dark: #1a7a41;
-  --color-accent-soft: #e9f8ef;
-  --color-gold: #c9a769;
+  /* Base surfaces */
+  --color-bg: #0b0f0d;
+  --color-bg-alt: #0e1310;
+  --color-card-bg: #121814;
+  --color-card-bg-soft: #0f1512;
+
+  /* Text */
+  --color-ink: #f2f0e9;
+  --color-ink-soft: #c3c9c2;
+  --color-muted: #8a938a;
+
+  /* Accent */
+  --color-accent: #4ade80;
+  --color-accent-dark: #22c55e;
+  --color-accent-soft: rgba(74, 222, 128, 0.12);
+  --color-gold: #d9b878;
   --color-orange: #e67e22;
-  --color-border: #e5e7eb;
+
+  /* Borders / lines */
+  --color-border: rgba(255, 255, 255, 0.1);
+  --color-border-soft: rgba(255, 255, 255, 0.06);
+
+  /* Kept for hero/choice sections which were already dark */
   --color-dark-bg: #0b0f0d;
   --color-dark-ink: #f5f3ee;
+
+  /* Monospace for stats/numbers */
+  --font-mono: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
   --font-display: 'Fraunces', Georgia, serif;
   --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
   --radius-md: 12px;
   --radius-lg: 20px;
-  --shadow-soft: 0 4px 24px rgba(17, 20, 23, 0.06);
+  --shadow-soft: 0 4px 24px rgba(0, 0, 0, 0.35);
 }
 
 html {
@@ -37,6 +53,11 @@ body {
   background: var(--color-bg);
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: var(--color-accent-soft);
+  color: var(--color-ink);
 }
 
 h1, h2, h3 {
@@ -246,6 +267,7 @@ a {
   max-width: 1100px;
   margin: 0 auto;
   padding: 5rem 2rem;
+  background: var(--color-bg);
 }
 
 .reveal {
@@ -253,12 +275,43 @@ a {
   transform: none;
 }
 
+.big-stat {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.big-stat-number {
+  font-family: var(--font-mono);
+  font-size: clamp(3rem, 9vw, 5.5rem);
+  font-weight: 700;
+  color: var(--color-accent);
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+}
+
+.big-stat-unit {
+  font-family: var(--font-mono);
+  font-size: clamp(1.6rem, 4vw, 2.4rem);
+  font-weight: 700;
+  color: var(--color-accent);
+}
+
+.big-stat-label {
+  display: block;
+  font-size: 0.85rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+  margin-top: 0.25rem;
+}
+
 .summary-badge {
   font-size: 1.15rem;
   font-weight: 500;
-  color: var(--color-ink);
+  font-family: var(--font-mono);
+  color: var(--color-accent);
   background: var(--color-accent-soft);
-  border: 1px solid #cdebd8;
+  border: 1px solid rgba(74, 222, 128, 0.25);
   border-radius: var(--radius-md);
   padding: 1.25rem 1.5rem;
   margin-bottom: 2rem;
@@ -270,13 +323,13 @@ a {
 }
 
 .summary-badge.is-error {
-  color: #7f1d1d;
-  background: #fef2f2;
-  border-color: #fecaca;
+  color: #fca5a5;
+  background: rgba(248, 113, 113, 0.1);
+  border-color: rgba(248, 113, 113, 0.3);
 }
 
 .chart-card {
-  background: #fff;
+  background: var(--color-card-bg);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-soft);
@@ -322,15 +375,15 @@ a {
 }
 
 .gpu-control-card {
-  background: #f9fafb;
-  border: 1px solid #eceff1;
+  background: var(--color-card-bg-soft);
+  border: 1px solid var(--color-border-soft);
   border-radius: var(--radius-md);
   padding: 1.1rem 1.2rem 1.3rem;
   transition: border-color 0.15s ease;
 }
 
 .gpu-control-card:hover {
-  border-color: #d7dbe0;
+  border-color: rgba(255, 255, 255, 0.18);
 }
 
 .gpu-control-card h3 {
@@ -364,7 +417,7 @@ a {
   appearance: none;
   height: 5px;
   border-radius: 999px;
-  background: #e5e7eb;
+  background: rgba(255, 255, 255, 0.12);
   outline: none;
   margin-bottom: 1rem;
   cursor: pointer;
@@ -465,7 +518,7 @@ a {
 }
 
 .info-section-alt {
-  background: #f9fafb;
+  background: var(--color-bg-alt);
   max-width: 100%;
 }
 
@@ -483,7 +536,7 @@ a {
   font-size: clamp(1.8rem, 4vw, 2.6rem);
   font-weight: 600;
   margin: 0 0 2.5rem;
-  color: #1a1a1a;
+  color: var(--color-ink);
 }
 
 .info-grid {
@@ -495,7 +548,7 @@ a {
 .info-block h3 {
   font-size: 1.1rem;
   margin: 0 0 0.6rem;
-  color: #1a1a1a;
+  color: var(--color-ink);
 }
 
 .info-block p {
@@ -521,6 +574,7 @@ a {
 
 .author-link:hover {
   text-decoration: underline;
+  color: var(--color-accent-dark);
 }
 
 /* ============================================================
@@ -545,11 +599,17 @@ a {
   flex: 1;
   padding: 0.85rem 1.1rem;
   border-radius: 10px;
-  border: 1px solid #d1d5db;
+  border: 1px solid var(--color-border);
+  background: var(--color-card-bg-soft);
+  color: var(--color-ink);
   font-size: 0.95rem;
   font-family: inherit;
   outline: none;
   transition: border-color 0.15s ease;
+}
+
+.faq-input::placeholder {
+  color: var(--color-muted);
 }
 
 .faq-input:focus {
@@ -560,16 +620,16 @@ a {
   margin-top: 1.25rem;
   padding: 1.1rem 1.3rem;
   background: var(--color-accent-soft);
-  border: 1px solid #cdebd8;
+  border: 1px solid rgba(74, 222, 128, 0.25);
   border-radius: 10px;
   font-size: 0.92rem;
   line-height: 1.6;
-  color: #1f2937;
+  color: var(--color-ink-soft);
 }
 
 .faq-answer strong {
   display: block;
-  color: var(--color-accent-dark);
+  color: var(--color-accent);
   margin-bottom: 0.4rem;
 }
 
@@ -578,9 +638,9 @@ a {
 }
 
 .faq-answer-empty {
-  background: #fef2f2;
-  border-color: #fecaca;
-  color: #7f1d1d;
+  background: rgba(248, 113, 113, 0.1);
+  border-color: rgba(248, 113, 113, 0.3);
+  color: #fca5a5;
 }
 
 .faq-suggestions {
@@ -594,19 +654,117 @@ a {
 }
 
 .faq-chip {
-  background: #fff;
+  background: var(--color-card-bg-soft);
   border: 1px solid var(--color-border);
   border-radius: 999px;
   padding: 0.4rem 0.9rem;
   font-size: 0.82rem;
   cursor: pointer;
-  color: #374151;
+  color: var(--color-ink-soft);
   transition: border-color 0.15s ease, color 0.15s ease;
 }
 
 .faq-chip:hover {
   border-color: var(--color-accent);
   color: var(--color-accent);
+}
+
+/* ============================================================
+   CHART TOOLTIP (custom glass-style, replaces Chart.js default)
+   ============================================================ */
+
+.chart-tooltip {
+  position: absolute;
+  pointer-events: none;
+  opacity: 0;
+  transform: translate(-50%, calc(-100% - 10px));
+  background: rgba(15, 21, 18, 0.92);
+  backdrop-filter: blur(6px);
+  border: 1px solid rgba(74, 222, 128, 0.3);
+  border-radius: 8px;
+  padding: 0.6rem 0.8rem;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: var(--color-ink);
+  white-space: nowrap;
+  transition: opacity 0.1s ease;
+  z-index: 5;
+}
+
+.chart-tooltip-title {
+  font-weight: 700;
+  color: var(--color-ink-soft);
+  margin-bottom: 0.35rem;
+  font-size: 0.7rem;
+}
+
+.chart-tooltip-row {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  line-height: 1.5;
+}
+
+.chart-tooltip-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+/* ============================================================
+   PAST RUNS / HISTORY TABLE
+   ============================================================ */
+
+.history-hint {
+  color: var(--color-muted);
+  font-size: 0.88rem;
+  margin: -0.75rem 0 1.5rem;
+}
+
+.history-table-wrap {
+  overflow-x: auto;
+}
+
+.history-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+}
+
+.history-table th,
+.history-table td {
+  text-align: left;
+  padding: 0.7rem 0.9rem;
+  border-bottom: 1px solid var(--color-border-soft);
+  white-space: nowrap;
+}
+
+.history-table th {
+  color: var(--color-muted);
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+}
+
+.history-table tbody tr:hover {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.history-table td.savings-positive {
+  color: var(--color-accent);
+}
+
+.history-table td.savings-negative {
+  color: #fca5a5;
+}
+
+.history-empty {
+  color: var(--color-muted);
+  font-size: 0.9rem;
+  padding: 1rem 0;
 }
 
 /* ============================================================
@@ -627,11 +785,11 @@ a {
 .info-block code,
 .author-bio code {
   display: inline-block;
-  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+  font-family: var(--font-mono);
   font-size: 0.88em;
   background: var(--color-accent-soft);
-  border: 1px solid #cdebd8;
-  color: var(--color-accent-dark);
+  border: 1px solid rgba(74, 222, 128, 0.25);
+  color: var(--color-accent);
   padding: 0.35rem 0.75rem;
   border-radius: 8px;
   margin: 0.35rem 0;

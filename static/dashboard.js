@@ -3,9 +3,85 @@ let powerChartInstance = null;
 let loadChartInstance = null;
 
 const CHART_PALETTE = {
-  roundRobin: '#e67e22',
-  energyAware: '#27ae60',
+  roundRobin: { dark: '#c2620f', light: '#f4a259' },
+  energyAware: { dark: '#1f9d55', light: '#6ee7a0' },
 };
+
+const CHART_GRID_COLOR = 'rgba(255, 255, 255, 0.08)';
+const CHART_TEXT_COLOR = '#c3c9c2';
+
+// Chart.js renders text/gridlines in black by default — make it match the
+// dark theme globally so every chart (current + future) picks this up.
+if (typeof Chart !== 'undefined') {
+  Chart.defaults.color = CHART_TEXT_COLOR;
+  Chart.defaults.borderColor = CHART_GRID_COLOR;
+  Chart.defaults.font.family = "'Inter', -apple-system, BlinkMacSystemFont, sans-serif";
+}
+
+// Builds (and caches) a top-to-bottom gradient per canvas+color pair so
+// bars read as lit from above instead of flat fills. Chart.js calls this
+// on every render, including before the chart has a layout (chartArea is
+// null on the very first pass) — fall back to the solid dark shade then.
+const gradientCache = new Map();
+
+function getBarGradient(chart, colorKey) {
+  const { ctx, chartArea } = chart;
+  if (!chartArea) return CHART_PALETTE[colorKey].dark;
+
+  const cacheKey = `${chart.canvas.id}-${colorKey}`;
+  const cached = gradientCache.get(cacheKey);
+  if (cached && cached.top === chartArea.top && cached.bottom === chartArea.bottom) {
+    return cached.gradient;
+  }
+
+  const gradient = ctx.createLinearGradient(0, chartArea.top, 0, chartArea.bottom);
+  gradient.addColorStop(0, CHART_PALETTE[colorKey].light);
+  gradient.addColorStop(1, CHART_PALETTE[colorKey].dark);
+  gradientCache.set(cacheKey, { gradient, top: chartArea.top, bottom: chartArea.bottom });
+  return gradient;
+}
+
+// Custom glass-style tooltip, replacing Chart.js's plain default box.
+// Chart.js calls this with everything needed to build our own markup and
+// position it relative to the canvas — we just render a styled div.
+function glassTooltipHandler(context) {
+  const { chart, tooltip } = context;
+  const wrap = chart.canvas.parentElement;
+
+  let tooltipEl = wrap.querySelector('.chart-tooltip');
+  if (!tooltipEl) {
+    tooltipEl = document.createElement('div');
+    tooltipEl.className = 'chart-tooltip';
+    wrap.appendChild(tooltipEl);
+  }
+
+  if (tooltip.opacity === 0) {
+    tooltipEl.style.opacity = '0';
+    return;
+  }
+
+  if (tooltip.body) {
+    const titleLines = tooltip.title || [];
+    let html = titleLines.length
+      ? `<div class="chart-tooltip-title">${titleLines.join(' ')}</div>`
+      : '';
+
+    tooltip.body.forEach((bodyItem, i) => {
+      const color = tooltip.labelColors[i];
+      bodyItem.lines.forEach(line => {
+        html += `<div class="chart-tooltip-row">
+          <span class="chart-tooltip-dot" style="background:${color.backgroundColor}"></span>${line}
+        </div>`;
+      });
+    });
+
+    tooltipEl.innerHTML = html;
+  }
+
+  tooltipEl.style.opacity = '1';
+  tooltipEl.style.left = `${tooltip.caretX}px`;
+  tooltipEl.style.top = `${tooltip.caretY}px`;
+}
 
 const runBtn = document.getElementById('run-comparison-btn');
 const summaryEl = document.getElementById('savings-summary');
@@ -14,6 +90,9 @@ function setRunning(isRunning) {
   runBtn.disabled = isRunning;
   runBtn.classList.toggle('is-loading', isRunning);
 }
+
+let latestComparisonData = null;
+let chartsRenderedOnce = false;
 
 async function loadComparison(customConfig = null) {
   setRunning(true);
@@ -42,13 +121,24 @@ async function loadComparison(customConfig = null) {
 
     const data = await res.json();
     summaryEl.classList.remove('is-error');
+    latestComparisonData = data;
     renderSummary(data);
-    renderTotalEnergyChart(data);
-    renderPowerChart(data);
-    renderLoadChart(data);
+
+    // First page load: don't draw the charts yet — let the scroll observer
+    // trigger it the moment the user actually scrolls to them, so the
+    // draw-in animation is something they see rather than something that
+    // already finished off-screen. Re-runs from the button always redraw
+    // immediately since the user is already looking at that section.
+    if (chartsRenderedOnce) {
+      renderAllCharts(data);
+    }
 
     if (!customConfig) {
       buildGpuControls(data.round_robin.gpus);
+    } else {
+      // Only POST requests (an explicit "Run Comparison" click) persist to
+      // the database — refresh the history table to reflect the new row.
+      loadHistory();
     }
   } catch (err) {
     summaryEl.textContent = 'Network error — is the server running?';
@@ -66,6 +156,37 @@ function renderSummary(data) {
     `Energy-aware scheduling ${direction} ${magnitude}% total energy ` +
     `(${data.round_robin.total_energy_wh}Wh → ${data.energy_aware.total_energy_wh}Wh) ` +
     `to finish the same workload.`;
+
+  const bigStatLabel = document.getElementById('big-stat-label');
+  bigStatLabel.textContent = data.energy_savings_pct >= 0 ? 'energy saved' : 'energy cost increase';
+  animateCountUp(document.getElementById('big-stat-number'), magnitude);
+}
+
+const COUNT_UP_DURATION_MS = 900;
+
+function animateCountUp(el, targetValue) {
+  const startValue = 0;
+  const startTime = performance.now();
+
+  function easeOutQuart(t) {
+    return 1 - Math.pow(1 - t, 4);
+  }
+
+  function step(now) {
+    const elapsed = now - startTime;
+    const progress = Math.min(elapsed / COUNT_UP_DURATION_MS, 1);
+    const eased = easeOutQuart(progress);
+    const current = startValue + (targetValue - startValue) * eased;
+    el.textContent = current.toFixed(2);
+
+    if (progress < 1) {
+      requestAnimationFrame(step);
+    } else {
+      el.textContent = targetValue.toFixed(2);
+    }
+  }
+
+  requestAnimationFrame(step);
 }
 
 function gpuLabels(gpus) {
@@ -76,15 +197,29 @@ function baseChartOptions(titleText) {
   return {
     responsive: true,
     maintainAspectRatio: false,
-    animation: { duration: 400, easing: 'easeOutQuart' },
+    animation: {
+      duration: 800,
+      easing: 'easeOutQuart',
+      delay: (context) => {
+        if (context.type === 'data' && context.mode === 'default') {
+          return context.dataIndex * 90 + context.datasetIndex * 120;
+        }
+        return 0;
+      },
+    },
     plugins: {
       title: { display: true, text: titleText, font: { size: 14, weight: '600' } },
       legend: { position: 'top', labels: { usePointStyle: true, boxWidth: 8 } },
-      tooltip: { mode: 'index', intersect: false },
+      tooltip: {
+        enabled: false,
+        mode: 'index',
+        intersect: false,
+        external: glassTooltipHandler,
+      },
     },
     scales: {
-      y: { beginAtZero: true, grid: { color: 'rgba(0,0,0,0.06)' } },
-      x: { grid: { display: false } },
+      y: { beginAtZero: true, grid: { color: CHART_GRID_COLOR }, ticks: { color: CHART_TEXT_COLOR } },
+      x: { grid: { display: false }, ticks: { color: CHART_TEXT_COLOR } },
     },
   };
 }
@@ -99,13 +234,15 @@ function renderTotalEnergyChart(data) {
         {
           label: 'Round-Robin (Wh)',
           data: data.round_robin.gpus.map(g => g.total_energy_wh),
-          backgroundColor: CHART_PALETTE.roundRobin,
+          backgroundColor: (ctx) => getBarGradient(ctx.chart, 'roundRobin'),
+          hoverBackgroundColor: CHART_PALETTE.roundRobin.light,
           borderRadius: 4,
         },
         {
           label: 'Energy-Aware (Wh)',
           data: data.energy_aware.gpus.map(g => g.total_energy_wh),
-          backgroundColor: CHART_PALETTE.energyAware,
+          backgroundColor: (ctx) => getBarGradient(ctx.chart, 'energyAware'),
+          hoverBackgroundColor: CHART_PALETTE.energyAware.light,
           borderRadius: 4,
         },
       ],
@@ -124,13 +261,15 @@ function renderPowerChart(data) {
         {
           label: 'Round-Robin (W)',
           data: data.round_robin.gpus.map(g => g.energy_watts),
-          backgroundColor: CHART_PALETTE.roundRobin,
+          backgroundColor: (ctx) => getBarGradient(ctx.chart, 'roundRobin'),
+          hoverBackgroundColor: CHART_PALETTE.roundRobin.light,
           borderRadius: 4,
         },
         {
           label: 'Energy-Aware (W)',
           data: data.energy_aware.gpus.map(g => g.energy_watts),
-          backgroundColor: CHART_PALETTE.energyAware,
+          backgroundColor: (ctx) => getBarGradient(ctx.chart, 'energyAware'),
+          hoverBackgroundColor: CHART_PALETTE.energyAware.light,
           borderRadius: 4,
         },
       ],
@@ -149,18 +288,75 @@ function renderLoadChart(data) {
         {
           label: 'Round-Robin (tokens)',
           data: data.round_robin.gpus.map(g => g.load),
-          backgroundColor: CHART_PALETTE.roundRobin,
+          backgroundColor: (ctx) => getBarGradient(ctx.chart, 'roundRobin'),
+          hoverBackgroundColor: CHART_PALETTE.roundRobin.light,
           borderRadius: 4,
         },
         {
           label: 'Energy-Aware (tokens)',
           data: data.energy_aware.gpus.map(g => g.load),
-          backgroundColor: CHART_PALETTE.energyAware,
+          backgroundColor: (ctx) => getBarGradient(ctx.chart, 'energyAware'),
+          hoverBackgroundColor: CHART_PALETTE.energyAware.light,
           borderRadius: 4,
         },
       ],
     },
     options: baseChartOptions('Per-GPU Load Distribution'),
+  });
+}
+
+const historyTableEl = document.getElementById('history-table');
+const historyTableBodyEl = document.getElementById('history-table-body');
+const historyEmptyEl = document.getElementById('history-empty');
+
+async function loadHistory() {
+  try {
+    const res = await fetch('/api/history');
+    if (!res.ok) return;
+
+    const runs = await res.json();
+    renderHistoryTable(runs);
+  } catch (err) {
+    // History is a nice-to-have — a failed fetch here shouldn't break the
+    // rest of the dashboard, so we just leave the empty-state message up.
+  }
+}
+
+function formatHistoryTimestamp(isoString) {
+  const date = new Date(isoString);
+  if (Number.isNaN(date.getTime())) return isoString;
+
+  return date.toLocaleString(undefined, {
+    month: 'short',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+  });
+}
+
+function renderHistoryTable(runs) {
+  if (!runs.length) {
+    historyTableEl.hidden = true;
+    historyEmptyEl.hidden = false;
+    return;
+  }
+
+  historyTableEl.hidden = false;
+  historyEmptyEl.hidden = true;
+  historyTableBodyEl.innerHTML = '';
+
+  runs.forEach((run, index) => {
+    const row = document.createElement('tr');
+    const savingsClass = run.energy_savings_pct >= 0 ? 'savings-positive' : 'savings-negative';
+
+    row.innerHTML = `
+      <td>${runs.length - index}</td>
+      <td>${formatHistoryTimestamp(run.created_at)}</td>
+      <td class="${savingsClass}">${run.energy_savings_pct}%</td>
+      <td>${run.round_robin_total_wh}</td>
+      <td>${run.energy_aware_total_wh}</td>
+    `;
+    historyTableBodyEl.appendChild(row);
   });
 }
 
@@ -200,6 +396,34 @@ function buildGpuControls(gpus) {
   });
 }
 
+function renderAllCharts(data) {
+  chartsRenderedOnce = true;
+  renderTotalEnergyChart(data);
+  renderPowerChart(data);
+  renderLoadChart(data);
+}
+
+// Fire the (currently unrendered) charts the first time their section
+// scrolls into view, so the draw-in/stagger animation actually plays in
+// front of the user instead of finishing off-screen during page load.
+const firstChartCard = document.getElementById('totalEnergyChart') &&
+  document.getElementById('totalEnergyChart').closest('.chart-card');
+
+if (firstChartCard) {
+  const chartRevealObserver = new IntersectionObserver(
+    (entries) => {
+      for (const entry of entries) {
+        if (entry.isIntersecting && latestComparisonData && !chartsRenderedOnce) {
+          renderAllCharts(latestComparisonData);
+          chartRevealObserver.disconnect();
+        }
+      }
+    },
+    { threshold: 0.2 }
+  );
+  chartRevealObserver.observe(firstChartCard);
+}
+
 function collectGpuConfig() {
   const efficiency_factors = [];
   const compute_capabilities = [];
@@ -219,3 +443,4 @@ runBtn.addEventListener('click', () => {
 });
 
 loadComparison();
+loadHistory();
