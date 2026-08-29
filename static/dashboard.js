@@ -4,12 +4,12 @@ let loadChartInstance = null;
 
 const CHART_PALETTE = {
   roundRobin: { dark: '#c2620f', light: '#f4a259' },
-  energyAware: { dark: '#1f9d55', light: '#6ee7a0' },
+  energyAware: { dark: '#2ba89c', light: '#4fd1c5' },
 };
 
 const CHART_GLOW = {
   roundRobin: 'rgba(244, 162, 89, 0.35)',
-  energyAware: 'rgba(99, 242, 154, 0.4)',
+  energyAware: 'rgba(79, 209, 197, 0.4)',
 };
 
 const CHART_GRID_COLOR = 'rgba(255, 255, 255, 0.05)';
@@ -188,6 +188,45 @@ function renderSummary(data) {
 
   updateHeroPreview(data);
   renderSecondaryStats(data);
+  renderLatencyPanel(data);
+}
+
+// Makespan = time until the slowest GPU in this strategy finishes, i.e. the
+// real wall-clock latency of the batch — not the same thing as total energy.
+// Uses completion_time_sec, which /api/compare already returns per GPU, so
+// this needs no backend changes.
+function computeMakespanSeconds(gpuSummary) {
+  if (!gpuSummary || !gpuSummary.length) return 0;
+  return Math.max(...gpuSummary.map(g => g.completion_time_sec));
+}
+
+function renderLatencyPanel(data) {
+  const rrEl = document.getElementById('latency-rr');
+  const llEl = document.getElementById('latency-ll');
+  const eaEl = document.getElementById('latency-ea');
+  const verdictEl = document.getElementById('latency-verdict');
+  if (!rrEl || !llEl || !eaEl) return;
+
+  const rrMakespan = computeMakespanSeconds(data.round_robin.gpus);
+  const llMakespan = computeMakespanSeconds(data.least_loaded.gpus);
+  const eaMakespan = computeMakespanSeconds(data.energy_aware.gpus);
+
+  rrEl.textContent = `${rrMakespan.toFixed(1)}s`;
+  llEl.textContent = `${llMakespan.toFixed(1)}s`;
+  eaEl.textContent = `${eaMakespan.toFixed(1)}s`;
+
+  if (verdictEl) {
+    const deltaVsRR = eaMakespan - rrMakespan;
+    const deltaVsLL = eaMakespan - llMakespan;
+    const worse = deltaVsRR > 0 || deltaVsLL > 0;
+    const magnitude = Math.max(Math.abs(deltaVsRR), Math.abs(deltaVsLL));
+
+    verdictEl.textContent = worse
+      ? `Energy-aware scheduling is ${magnitude.toFixed(1)}s slower at worst here — a real ` +
+        `latency trade-off worth knowing about, not something the energy number alone shows.`
+      : `Energy-aware scheduling doesn't cost latency here — it matches or beats both ` +
+        `baselines' makespan while also using less energy.`;
+  }
 }
 
 // Renders the three supporting stats under the headline number: savings

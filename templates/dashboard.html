@@ -4,6 +4,11 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Energy-Aware LLM Scheduler</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2220%22 fill=%22%23060907%22/><text x=%2250%22 y=%2266%22 font-size=%2244%22 font-family=%22Georgia,serif%22 fill=%22%23f5a623%22 text-anchor=%22middle%22>EA</text></svg>">
+  <meta property="og:title" content="Energy-Aware LLM Inference Scheduling">
+  <meta property="og:description" content="A workload-aware scheduler that beats naive Round-Robin and Least-Loaded baselines by routing requests based on marginal energy cost across a heterogeneous GPU fleet.">
+  <meta property="og:type" content="website">
+  <meta name="description" content="A workload-aware scheduler that beats naive Round-Robin and Least-Loaded baselines by routing requests based on marginal energy cost across a heterogeneous GPU fleet.">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -135,37 +140,63 @@
     </div>
     <p id="savings-summary" class="summary-badge reveal">Loading comparison…</p>
 
-<div class="secondary-stats reveal" id="secondary-stats">
-  <div class="secondary-stat">
-    <span class="secondary-stat-value" id="stat-vs-least-loaded">—</span>
-    <span class="secondary-stat-label">saved vs. Least-Loaded baseline</span>
-  </div>
-  <div class="secondary-stat">
-    <span class="secondary-stat-value" id="stat-usd">—</span>
-    <span class="secondary-stat-label">projected savings at scale</span>
-  </div>
-  <div class="secondary-stat">
-    <span class="secondary-stat-value" id="stat-co2">—</span>
-    <span class="secondary-stat-label">CO₂e avoided at scale</span>
-  </div>
-</div>
-<p class="scale-disclaimer" id="scale-disclaimer"></p>
+    <div class="secondary-stats reveal" id="secondary-stats">
+      <div class="secondary-stat">
+        <span class="secondary-stat-value" id="stat-vs-least-loaded">—</span>
+        <span class="secondary-stat-label">saved vs. Least-Loaded baseline</span>
+      </div>
+      <div class="secondary-stat">
+        <span class="secondary-stat-value" id="stat-usd">—</span>
+        <span class="secondary-stat-label">projected savings at scale</span>
+      </div>
+      <div class="secondary-stat">
+        <span class="secondary-stat-value" id="stat-co2">—</span>
+        <span class="secondary-stat-label">CO₂e avoided at scale</span>
+      </div>
+    </div>
+    <p class="scale-disclaimer" id="scale-disclaimer"></p>
 
-<section class="chart-card reveal" id="sensitivity-panel">
-  <h2 class="chart-title">Savings Scale With Fleet Heterogeneity</h2>
-  <p class="controls-hint">
-    A single savings percentage for one fleet configuration doesn't say much on its own.
-    This sweeps the GPU fleet from uniform hardware (0%, where no scheduler can beat any
-    other) up through your configured fleet's spread and beyond — showing the energy-aware
-    scheduler's advantage grows predictably as hardware becomes more heterogeneous, against
-    <em>both</em> baselines.
-  </p>
-  <div class="chart-wrap">
-    <canvas id="sensitivityChart"></canvas>
-  </div>
-</section>
+    <section class="chart-card reveal" id="sensitivity-panel">
+      <h2 class="chart-title">Savings Scale With Fleet Heterogeneity</h2>
+      <p class="controls-hint">
+        A single savings percentage for one fleet configuration doesn't say much on its own.
+        This sweeps the GPU fleet from uniform hardware (0%, where no scheduler can beat any
+        other) up through your configured fleet's spread and beyond — showing the energy-aware
+        scheduler's advantage grows predictably as hardware becomes more heterogeneous, against
+        <em>both</em> baselines.
+      </p>
+      <div class="chart-wrap">
+        <canvas id="sensitivityChart"></canvas>
+      </div>
+    </section>
 
-<section class="chart-card reveal" id="controls-panel">
+    <section class="chart-card variant-teal reveal" id="latency-panel">
+      <h2 class="chart-title">Does Optimizing for Energy Cost You Speed?</h2>
+      <p class="controls-hint">
+        A scheduler that only minimizes energy could, in principle, pile requests onto an
+        efficient-but-slow GPU and blow up total completion time. This measures the
+        <strong>makespan</strong> — wall-clock time until the slowest GPU finishes — for each
+        strategy, using the exact same per-GPU completion times already computed for the
+        charts above.
+      </p>
+      <div class="latency-stats" id="latency-stats">
+        <div class="latency-stat">
+          <span class="latency-stat-label">Round-Robin</span>
+          <span class="latency-stat-value" id="latency-rr">—</span>
+        </div>
+        <div class="latency-stat">
+          <span class="latency-stat-label">Least-Loaded</span>
+          <span class="latency-stat-value" id="latency-ll">—</span>
+        </div>
+        <div class="latency-stat">
+          <span class="latency-stat-label">Energy-Aware</span>
+          <span class="latency-stat-value" id="latency-ea">—</span>
+        </div>
+      </div>
+      <p class="latency-verdict" id="latency-verdict"></p>
+    </section>
+
+    <section class="chart-card reveal" id="controls-panel">
       <div class="controls-header">
         <div>
           <h2 class="chart-title">Try Your Own GPU Fleet</h2>
