@@ -72,6 +72,10 @@
 
   <!-- DASHBOARD -->
   <main id="dashboard">
+    <div class="big-stat reveal" id="big-stat">
+      <span class="big-stat-number" id="big-stat-number">0</span><span class="big-stat-unit">%</span>
+      <span class="big-stat-label" id="big-stat-label">energy saved</span>
+    </div>
     <p id="savings-summary" class="summary-badge reveal">Loading comparison…</p>
 
     <section class="chart-card reveal" id="controls-panel">
@@ -106,6 +110,26 @@
       <h2 class="chart-title">Per-GPU Load Distribution</h2>
       <div class="chart-wrap">
         <canvas id="loadChart"></canvas>
+      </div>
+    </section>
+
+    <section class="chart-card reveal" id="history-panel">
+      <h2 class="chart-title">Past Runs</h2>
+      <p class="history-hint">Every comparison you run gets saved. Most recent 20 shown here.</p>
+      <div class="history-table-wrap">
+        <table class="history-table" id="history-table" hidden>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>When</th>
+              <th>Savings</th>
+              <th>Round-Robin (Wh)</th>
+              <th>Energy-Aware (Wh)</th>
+            </tr>
+          </thead>
+          <tbody id="history-table-body"></tbody>
+        </table>
+        <p class="history-empty" id="history-empty">No runs yet — click "Run Comparison" above to save your first one.</p>
       </div>
     </section>
   </main>
