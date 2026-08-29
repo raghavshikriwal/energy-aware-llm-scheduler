@@ -160,6 +160,25 @@ function renderSummary(data) {
   const bigStatLabel = document.getElementById('big-stat-label');
   bigStatLabel.textContent = data.energy_savings_pct >= 0 ? 'energy saved' : 'energy cost increase';
   animateCountUp(document.getElementById('big-stat-number'), magnitude);
+
+  updateHeroPreview(data);
+}
+
+// Mirrors the same real comparison result into the hero's result preview
+// card. Deliberately reads from the same `data` object as the rest of the
+// dashboard — never hardcoded — and stays hidden until a real result exists.
+function updateHeroPreview(data) {
+  const preview = document.getElementById('hero-result-preview');
+  const pctEl = document.getElementById('hero-result-pct');
+  const labelEl = document.getElementById('hero-result-preview-label');
+  const detailEl = document.getElementById('hero-result-detail');
+  if (!preview || !pctEl || !labelEl || !detailEl) return;
+
+  const magnitude = Math.abs(data.energy_savings_pct);
+  labelEl.textContent = data.energy_savings_pct >= 0 ? 'Energy Saved' : 'Energy Cost Increase';
+  pctEl.textContent = `${magnitude.toFixed(2)}%`;
+  detailEl.textContent = `${data.round_robin.total_energy_wh} Wh → ${data.energy_aware.total_energy_wh} Wh`;
+  preview.hidden = false;
 }
 
 const COUNT_UP_DURATION_MS = 900;

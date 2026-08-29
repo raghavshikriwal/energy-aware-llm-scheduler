@@ -13,16 +13,44 @@
 </head>
 <body>
 
+  <!-- SITE NAV -->
+  <header class="site-nav">
+    <div class="site-nav-inner">
+      <a href="#top" class="site-nav-logo">EA</a>
+
+      <nav class="site-nav-links" id="site-nav-links" aria-label="Primary">
+        <a href="#controls-panel" class="site-nav-link" data-nav-target="controls-panel">Simulator</a>
+        <a href="#big-stat" class="site-nav-link" data-nav-target="big-stat">Results</a>
+        <a href="#how-it-works" class="site-nav-link" data-nav-target="how-it-works">How It Works</a>
+        <a href="#methodology" class="site-nav-link" data-nav-target="methodology">Methodology</a>
+        <a href="#author" class="site-nav-link" data-nav-target="author">About</a>
+        <a href="#faq" class="site-nav-link" data-nav-target="faq">FAQ</a>
+      </nav>
+
+      <button type="button" class="site-nav-toggle" id="site-nav-toggle" aria-label="Open menu" aria-expanded="false" aria-controls="site-nav-links">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
   <!-- HERO -->
-  <section class="hero">
+  <section class="hero" id="top">
     <canvas id="heroCanvas"></canvas>
     <div class="hero-content">
-      <span class="eyebrow eyebrow-light">Cloud Computing · Course Project</span>
-      <h1>Energy-Aware LLM<br>Inference Scheduling</h1>
-      <p class="hero-subtitle">A naive round-robin scheduler vs. a smarter energy-aware scheduler — simulated across a heterogeneous GPU fleet, measured in real energy saved.</p>
-      <a href="#choice" class="scroll-cue" aria-label="Scroll down">
-        <span></span>
-      </a>
+      <span class="eyebrow eyebrow-light">Cloud Computing · Systems Research</span>
+      <h1>Energy-Aware<br>LLM Inference<br>Scheduling</h1>
+      <p class="hero-subtitle">A workload-aware scheduler that compares naive Round-Robin placement with marginal-energy-based scheduling across a heterogeneous GPU fleet.</p>
+
+      <div class="hero-cta-row">
+        <a href="#dashboard" class="hero-cta-primary">Explore the Simulator →</a>
+        <a href="#how-it-works" class="hero-cta-secondary">How It Works</a>
+      </div>
+
+      <div class="hero-result-preview" id="hero-result-preview" hidden>
+        <span class="hero-result-value" id="hero-result-pct">—</span>
+        <span class="hero-result-label" id="hero-result-preview-label">Energy Saved</span>
+        <span class="hero-result-detail" id="hero-result-detail"></span>
+      </div>
     </div>
   </section>
 
@@ -288,5 +316,6 @@
   <script src="{{ url_for('static', filename='animations.js') }}"></script>
   <script src="{{ url_for('static', filename='landing.js') }}"></script>
   <script src="{{ url_for('static', filename='faq.js') }}"></script>
+  <script src="{{ url_for('static', filename='nav.js') }}"></script>
 </body>
 </html>
