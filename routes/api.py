@@ -2,9 +2,13 @@
 
 from __future__ import annotations
 
+from pydantic import ValidationError
+
 from flask import Blueprint, jsonify, request
 
 from models.database import get_recent_runs, save_comparison_run
+from models.exceptions import InvalidGPUConfigError, TraceNotFoundError
+from models.schemas import GPUFleetConfig
 from services.energy_aware_scheduler import energy_aware_schedule
 from services.least_loaded_scheduler import least_loaded_schedule
 from services.round_robin_scheduler import (
@@ -51,29 +55,33 @@ def _parse_custom_gpu_config():
 
     Falls back to the module defaults for anything not provided, so this
     endpoint keeps working exactly as before if the caller sends nothing.
+    Validation itself lives in models.schemas.GPUFleetConfig — this function
+    just parses the body against that schema and translates a Pydantic
+    ValidationError into our own InvalidGPUConfigError so every route
+    returns errors in the same shape (see models/exceptions.py).
+
     Returns (efficiency_factors, compute_capabilities, num_gpus).
     """
     body = request.get_json(silent=True) or {}
 
-    efficiency_factors = body.get("efficiency_factors") or DEFAULT_EFFICIENCY_FACTORS
-    compute_capabilities = body.get("compute_capabilities") or DEFAULT_COMPUTE_CAPABILITIES
+    try:
+        config = GPUFleetConfig.model_validate(body)
+    except ValidationError as e:
+        # Pydantic's default message is multi-line and implementation-y;
+        # collapse it to one readable sentence per error for the API caller.
+        first_error = e.errors()[0]
+        field = ".".join(str(loc) for loc in first_error["loc"]) or "body"
+        raise InvalidGPUConfigError(f"{field}: {first_error['msg']}") from e
 
-    # Basic validation — reject obviously broken input rather than letting
-    # it silently produce nonsense (e.g. divide-by-zero speed).
-    if not isinstance(efficiency_factors, list) or not all(
-        isinstance(x, (int, float)) and x > 0 for x in efficiency_factors
-    ):
-        raise ValueError("efficiency_factors must be a list of positive numbers")
-
-    if not isinstance(compute_capabilities, list) or not all(
-        isinstance(x, (int, float)) and x > 0 for x in compute_capabilities
-    ):
-        raise ValueError("compute_capabilities must be a list of positive numbers")
+    efficiency_factors = config.efficiency_factors or DEFAULT_EFFICIENCY_FACTORS
+    compute_capabilities = config.compute_capabilities or DEFAULT_COMPUTE_CAPABILITIES
 
     if len(efficiency_factors) != len(compute_capabilities):
-        raise ValueError("efficiency_factors and compute_capabilities must be the same length")
+        raise InvalidGPUConfigError(
+            "efficiency_factors and compute_capabilities must be the same length"
+        )
 
-    num_gpus = body.get("num_gpus") or len(efficiency_factors)
+    num_gpus = config.num_gpus or len(efficiency_factors)
 
     return efficiency_factors, compute_capabilities, num_gpus
 
@@ -83,12 +91,9 @@ def compare():
     try:
         requests_trace = load_trace()
     except FileNotFoundError as e:
-        return jsonify({"error": str(e)}), 404
+        raise TraceNotFoundError(str(e)) from e
 
-    try:
-        efficiency_factors, compute_capabilities, num_gpus = _parse_custom_gpu_config()
-    except ValueError as e:
-        return jsonify({"error": str(e)}), 400
+    efficiency_factors, compute_capabilities, num_gpus = _parse_custom_gpu_config()
 
     rr_gpus = round_robin_schedule(
         requests_trace,
@@ -199,12 +204,9 @@ def sensitivity():
     try:
         requests_trace = load_trace()
     except FileNotFoundError as e:
-        return jsonify({"error": str(e)}), 404
+        raise TraceNotFoundError(str(e)) from e
 
-    try:
-        efficiency_factors, compute_capabilities, num_gpus = _parse_custom_gpu_config()
-    except ValueError as e:
-        return jsonify({"error": str(e)}), 400
+    efficiency_factors, compute_capabilities, num_gpus = _parse_custom_gpu_config()
 
     results = run_sensitivity_sweep(
         requests_trace,
