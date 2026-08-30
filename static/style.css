@@ -64,7 +64,6 @@ body {
   background: var(--color-bg);
   line-height: 1.47;
   -webkit-font-smoothing: antialiased;
-  font-feature-settings: "numr";
   position: relative;
 }
 
