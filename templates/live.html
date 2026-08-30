@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Live GPU Lab — Energy-Aware LLM Scheduling</title>
+  <meta name="description" content="Real NVIDIA GPU telemetry and real LLM inference, validating the energy-aware scheduler on physical hardware.">
+
+  <link rel="stylesheet" href="{{ url_for('static', filename='tokens.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='live.css') }}">
+</head>
+<body>
+
+  <!-- SITE NAV (same as dashboard.html, with Live added) -->
+  <header class="site-nav">
+    <div class="site-nav-inner">
+      <a href="/" class="site-nav-logo">EA</a>
+
+      <nav class="site-nav-links" id="site-nav-links" aria-label="Primary">
+        <a href="/#controls-panel" class="site-nav-link">Simulator</a>
+        <a href="/#big-stat" class="site-nav-link">Results</a>
+        <a href="/live" class="site-nav-link is-active">Live</a>
+        <a href="/#how-it-works" class="site-nav-link">How It Works</a>
+        <a href="/#methodology" class="site-nav-link">Methodology</a>
+        <a href="/#faq" class="site-nav-link">FAQ</a>
+      </nav>
+
+      <button type="button" class="site-nav-toggle" id="site-nav-toggle" aria-label="Open menu" aria-expanded="false" aria-controls="site-nav-links">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <main class="live-page">
+
+    <section class="live-hero">
+      <p class="live-eyebrow">Real hardware validation</p>
+      <h1>LIVE GPU LAB</h1>
+      <p class="live-subhead">Real hardware. Real inference. Real energy.</p>
+      <p class="live-caveat">
+        This page never shows simulated numbers as measurements. If the GPU
+        worker is unreachable, every field below says so plainly instead of
+        guessing.
+      </p>
+    </section>
+
+    <section class="live-status-bar" id="live-status-bar" aria-live="polite">
+      <span class="status-dot" id="status-dot"></span>
+      <span id="status-text">Checking GPU server…</span>
+    </section>
+
+    <section class="live-panel" aria-label="GPU telemetry">
+      <div class="live-panel-header">
+        <h2>GPU Fleet</h2>
+        <span class="live-panel-tag">NVML · live readings</span>
+      </div>
+      <div class="gpu-card-grid" id="gpu-card-grid">
+        <p class="gpu-empty-state" id="gpu-empty-state">Waiting for GPU server…</p>
+      </div>
+    </section>
+
+    <section class="live-panel" aria-label="Run real inference">
+      <div class="live-panel-header">
+        <h2>Run Real Inference</h2>
+        <span class="live-panel-tag">Energy-aware scheduler</span>
+      </div>
+
+      <form id="inference-form" class="inference-form">
+        <label class="field-label" for="prompt-input">Prompt</label>
+        <textarea id="prompt-input" name="prompt" rows="3" maxlength="4000"
+          placeholder="Type a real prompt to send to the GPU worker…" required></textarea>
+
+        <div class="inference-form-row">
+          <div class="field-group">
+            <label class="field-label" for="max-tokens-input">Max new tokens</label>
+            <input id="max-tokens-input" name="max_new_tokens" type="number" min="1" max="512" value="128">
+          </div>
+
+          <div class="field-group">
+            <label class="field-label" for="strategy-select">Scheduler</label>
+            <select id="strategy-select" name="strategy">
+              <option value="energy_aware" selected>Energy-Aware</option>
+              <option value="least_loaded">Least-Loaded</option>
+              <option value="round_robin">Round-Robin</option>
+            </select>
+          </div>
+        </div>
+
+        <button type="submit" id="run-inference-btn" class="run-btn" disabled>
+          Run Real Inference
+        </button>
+        <p class="run-btn-hint" id="run-btn-hint">Waiting for GPU server…</p>
+      </form>
+    </section>
+
+    <section class="live-panel" aria-label="Request result" id="result-panel" hidden>
+      <div class="live-panel-header">
+        <h2>Request <span id="result-request-id">#0000</span></h2>
+        <span class="live-panel-tag" id="result-strategy-tag">Energy-Aware</span>
+      </div>
+
+      <div class="result-grid" id="result-grid"></div>
+
+      <div class="result-text-block">
+        <p class="field-label">Model output</p>
+        <p id="result-text" class="result-text"></p>
+      </div>
+    </section>
+
+  </main>
+
+  <script src="{{ url_for('static', filename='nav.js') }}"></script>
+  <script src="{{ url_for('static', filename='live.js') }}"></script>
+</body>
+</html>

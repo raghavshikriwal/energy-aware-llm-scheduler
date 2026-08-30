@@ -1,0 +1,317 @@
+/* ============================================================
+   LIVE GPU LAB
+   Reuses tokens.css for site-wide consistency. The GPU telemetry
+   zone intentionally breaks into a dark "instrument panel" look
+   with monospace readouts — a visual signal that this data comes
+   off physical hardware, not the light/paper simulator pages.
+   ============================================================ */
+
+.live-page {
+  max-width: var(--page-max-width);
+  margin: 0 auto;
+  padding: var(--spacing-48) var(--spacing-24) var(--spacing-120);
+}
+
+/* ---- Hero ---- */
+.live-hero {
+  padding: var(--spacing-48) 0 var(--spacing-32);
+  border-bottom: 1px solid var(--color-hairline);
+  margin-bottom: var(--spacing-32);
+}
+
+.live-eyebrow {
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: var(--text-micro);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-ember);
+  margin: 0 0 var(--spacing-12);
+}
+
+.live-hero h1 {
+  font-family: var(--font-sf-pro-display);
+  font-size: var(--text-heading-sm);
+  line-height: var(--leading-heading-sm);
+  letter-spacing: -0.02em;
+  margin: 0 0 var(--spacing-8);
+  color: var(--color-primary-ink);
+}
+
+.live-subhead {
+  font-size: var(--text-body-lg);
+  color: var(--color-deep-gray);
+  margin: 0 0 var(--spacing-16);
+}
+
+.live-caveat {
+  font-size: var(--text-body-sm);
+  color: var(--color-mid-gray);
+  max-width: 640px;
+  margin: 0;
+}
+
+/* ---- Status bar ---- */
+.live-status-bar {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-12);
+  padding: var(--spacing-16) var(--spacing-24);
+  background: var(--color-faded-surface);
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-links);
+  font-weight: var(--font-weight-medium);
+  margin-bottom: var(--spacing-32);
+}
+
+.status-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--color-mid-gray);
+  flex-shrink: 0;
+  transition: background-color 0.2s ease;
+}
+
+.status-dot.is-online {
+  background: #2fb35a;
+  box-shadow: 0 0 0 3px rgba(47, 179, 90, 0.18);
+}
+
+.status-dot.is-offline {
+  background: #c23b3b;
+  box-shadow: 0 0 0 3px rgba(194, 59, 59, 0.14);
+}
+
+/* ---- Panels ---- */
+.live-panel {
+  margin-bottom: var(--spacing-40);
+}
+
+.live-panel-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--spacing-12);
+  margin-bottom: var(--spacing-16);
+}
+
+.live-panel-header h2 {
+  font-size: var(--text-subheading);
+  margin: 0;
+  color: var(--color-primary-ink);
+}
+
+.live-panel-tag {
+  font-size: var(--text-micro);
+  color: var(--color-quiet-dot);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  white-space: nowrap;
+}
+
+/* ---- GPU instrument panel ---- */
+.gpu-card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: var(--spacing-16);
+  background: var(--color-midnight);
+  border-radius: var(--radius-cards);
+  padding: var(--spacing-24);
+}
+
+.gpu-empty-state {
+  grid-column: 1 / -1;
+  color: #b7c0cc;
+  font-size: var(--text-body-sm);
+  margin: 0;
+  padding: var(--spacing-24) 0;
+  text-align: center;
+}
+
+.gpu-card {
+  background: #232b38;
+  border: 1px solid #33404f;
+  border-radius: var(--radius-links);
+  padding: var(--spacing-20);
+  color: #e7ebf0;
+}
+
+.gpu-card-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--spacing-12);
+}
+
+.gpu-card-index {
+  font-size: var(--text-micro);
+  color: #8b96a5;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.gpu-card-badge {
+  font-size: var(--text-micro);
+  font-weight: var(--font-weight-semibold);
+  padding: 2px 8px;
+  border-radius: var(--radius-badges);
+  background: rgba(47, 179, 90, 0.16);
+  color: #6fe39a;
+}
+
+.gpu-card-name {
+  font-size: var(--text-body-sm);
+  font-weight: var(--font-weight-semibold);
+  margin: 0 0 var(--spacing-16);
+  color: #ffffff;
+}
+
+.gpu-stat-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 6px 0;
+  border-top: 1px solid #33404f;
+  font-family: 'SF Mono', ui-monospace, 'Menlo', monospace;
+  font-size: var(--text-caption);
+}
+
+.gpu-stat-row:first-of-type {
+  border-top: none;
+}
+
+.gpu-stat-label {
+  color: #8b96a5;
+  font-family: var(--font-sf-pro-text);
+}
+
+.gpu-stat-value {
+  color: #e7ebf0;
+}
+
+.gpu-stat-value.is-unknown {
+  color: #5c6774;
+  font-style: italic;
+}
+
+/* ---- Inference form ---- */
+.inference-form {
+  background: var(--color-paper);
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-cards);
+  padding: var(--card-padding);
+}
+
+.field-label {
+  display: block;
+  font-size: var(--text-micro);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-deep-gray);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: var(--spacing-8);
+}
+
+.inference-form textarea,
+.inference-form input,
+.inference-form select {
+  width: 100%;
+  font-family: var(--font-sf-pro-text);
+  font-size: var(--text-body-sm);
+  padding: var(--spacing-12);
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-links);
+  background: var(--color-canvas);
+  color: var(--color-primary-ink);
+  box-sizing: border-box;
+}
+
+.inference-form-row {
+  display: flex;
+  gap: var(--spacing-16);
+  margin: var(--spacing-16) 0;
+}
+
+.field-group {
+  flex: 1;
+}
+
+.run-btn {
+  appearance: none;
+  border: none;
+  border-radius: var(--radius-buttons);
+  background: var(--color-electric-blue);
+  color: #ffffff;
+  font-size: var(--text-body-sm);
+  font-weight: var(--font-weight-medium);
+  padding: var(--spacing-12) var(--spacing-32);
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.run-btn:hover:not(:disabled) {
+  background: var(--color-electric-blue-dark);
+}
+
+.run-btn:disabled {
+  background: var(--color-hairline);
+  color: var(--color-mid-gray);
+  cursor: not-allowed;
+}
+
+.run-btn-hint {
+  margin: var(--spacing-8) 0 0;
+  font-size: var(--text-caption);
+  color: var(--color-mid-gray);
+}
+
+.run-btn-hint.is-error {
+  color: #c23b3b;
+}
+
+/* ---- Result panel ---- */
+.result-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: var(--spacing-16);
+  margin-bottom: var(--spacing-20);
+}
+
+.result-stat {
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-links);
+  padding: var(--spacing-16);
+  background: var(--color-faded-surface);
+}
+
+.result-stat-label {
+  font-size: var(--text-micro);
+  color: var(--color-mid-gray);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin: 0 0 var(--spacing-4);
+}
+
+.result-stat-value {
+  font-family: 'SF Mono', ui-monospace, 'Menlo', monospace;
+  font-size: var(--text-body-sm);
+  color: var(--color-primary-ink);
+  margin: 0;
+}
+
+.result-text-block {
+  border-top: 1px solid var(--color-hairline);
+  padding-top: var(--spacing-16);
+}
+
+.result-text {
+  font-size: var(--text-body-sm);
+  color: var(--color-deep-gray);
+  white-space: pre-wrap;
+  margin: 0;
+}
+
+@media (max-width: 640px) {
+  .inference-form-row {
+    flex-direction: column;
+  }
+}

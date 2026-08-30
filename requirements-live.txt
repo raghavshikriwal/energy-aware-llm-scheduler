@@ -1,0 +1,15 @@
+# Install these on the machine that actually has the NVIDIA GPU
+# (local PC / lab machine / rented cloud GPU) — NOT on Render.
+#
+#   pip install -r requirements-live.txt
+#
+Flask==3.0.3
+gunicorn==22.0.0
+Flask-Limiter==4.1.1
+nvidia-ml-py==12.560.30
+requests==2.32.3
+
+# --- Phase 5: real inference (uncomment when ready) ---
+# Pick versions matching your CUDA driver; see https://pytorch.org/get-started/locally/
+# torch
+# transformers
