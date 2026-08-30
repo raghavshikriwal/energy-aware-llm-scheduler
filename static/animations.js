@@ -81,19 +81,42 @@ function initHeroCanvas() {
 }
 
 function initScrollReveal() {
-  const revealEls = document.querySelectorAll(".reveal");
+  // Auto-tag the children of card grids as reveal items with an
+  // increasing transition-delay, so each grid cascades in rather than
+  // popping in as one flat block. Containers keep their own .reveal
+  // class (set in the HTML) for the top-level fade; this only staggers
+  // what's inside them.
+  const staggerGroups = [
+    '.choice-grid > .choice-card',
+    '.info-grid > .info-block',
+    '.secondary-stats > .secondary-stat',
+    '.latency-stats > .latency-stat',
+    '.gpu-controls > .gpu-control-card',
+  ];
+
+  const STAGGER_STEP_MS = 70;
+  const MAX_DELAY_MS = 420;
+
+  staggerGroups.forEach((selector) => {
+    document.querySelectorAll(selector).forEach((el, i) => {
+      el.classList.add('reveal');
+      el.style.setProperty('--reveal-delay', `${Math.min(i * STAGGER_STEP_MS, MAX_DELAY_MS)}ms`);
+    });
+  });
+
+  const revealEls = document.querySelectorAll('.reveal');
   if (!revealEls.length) return;
 
   const observer = new IntersectionObserver(
     (entries) => {
       for (const entry of entries) {
         if (entry.isIntersecting) {
-          entry.target.classList.add("is-visible");
+          entry.target.classList.add('is-visible');
           observer.unobserve(entry.target);
         }
       }
     },
-    { threshold: 0.15 }
+    { threshold: 0.12, rootMargin: '0px 0px -8% 0px' }
   );
 
   revealEls.forEach((el) => observer.observe(el));

@@ -592,7 +592,7 @@ code, .history-table, .big-stat-number, .big-stat-unit, .secondary-stat-value,
   padding: var(--card-padding) 1.5rem;
   text-decoration: none;
   color: inherit;
-  transition: transform 0.18s ease-out;
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
   overflow: hidden;
 }
 
@@ -657,13 +657,20 @@ code, .history-table, .big-stat-number, .big-stat-unit, .secondary-stat-value,
 
 .reveal {
   opacity: 0;
-  transform: translateY(16px);
-  transition: opacity 0.4s ease-out, transform 0.4s ease-out;
+  transform: translateY(28px) scale(0.985);
+  filter: blur(6px);
+  transition:
+    opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.9s cubic-bezier(0.16, 1, 0.3, 1),
+    filter 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+  transition-delay: var(--reveal-delay, 0ms);
+  will-change: opacity, transform, filter;
 }
 
 .reveal.is-visible {
   opacity: 1;
-  transform: translateY(0);
+  transform: translateY(0) scale(1);
+  filter: blur(0);
 }
 
 .big-stat {
@@ -728,6 +735,11 @@ code, .history-table, .big-stat-number, .big-stat-unit, .secondary-stat-value,
   border-radius: var(--radius-cards);
   padding: 1rem 1.25rem;
   text-align: center;
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.secondary-stat:hover {
+  transform: translateY(-2px);
 }
 
 .secondary-stat-value {
@@ -777,6 +789,11 @@ code, .history-table, .big-stat-number, .big-stat-unit, .secondary-stat-value,
   border-radius: var(--radius-cards);
   padding: 1rem;
   text-align: center;
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.latency-stat:hover {
+  transform: translateY(-2px);
 }
 
 .latency-stat-label {
@@ -811,7 +828,7 @@ code, .history-table, .big-stat-number, .big-stat-unit, .secondary-stat-value,
   padding: var(--card-padding) clamp(1.25rem, 3vw, 2.5rem);
   margin-bottom: 2rem;
   overflow: hidden;
-  transition: transform 0.2s ease-out;
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .chart-card::before,
@@ -820,7 +837,7 @@ code, .history-table, .big-stat-number, .big-stat-unit, .secondary-stat-value,
 }
 
 .chart-card:hover {
-  transform: none;
+  transform: translateY(-3px);
 }
 
 .chart-card > * {
@@ -872,6 +889,11 @@ code, .history-table, .big-stat-number, .big-stat-unit, .secondary-stat-value,
   background: var(--color-paper);
   border-radius: var(--radius-cards);
   padding: 1.1rem 1.2rem 1.3rem;
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.gpu-control-card:hover {
+  transform: translateY(-2px);
 }
 
 .gpu-control-card h3 {
@@ -1315,5 +1337,6 @@ code, .history-table, .big-stat-number, .big-stat-unit, .secondary-stat-value,
   .reveal {
     opacity: 1;
     transform: none;
+    filter: none;
   }
 }
