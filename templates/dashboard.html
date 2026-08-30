@@ -56,6 +56,12 @@
           <span class="hero-result-value" id="hero-result-pct">—</span>
           <span class="hero-result-label" id="hero-result-preview-label">Energy Saved</span>
           <span class="hero-result-detail" id="hero-result-detail"></span>
+          <!-- Populated from the /api/sensitivity sweep once it loads, so
+               the headline number is immediately followed by the stronger
+               "this grows with fleet diversity" story instead of leaving
+               a single ~3% figure to speak for itself. Hidden until real
+               sweep data arrives — never a hardcoded placeholder. -->
+          <span class="hero-result-scale-note" id="hero-result-scale-note" hidden></span>
         </div>
       </div>
 
@@ -343,10 +349,12 @@
         <h3>Current limitations</h3>
         <p>
           The load-balance penalty is currently set to zero — this is pure greedy energy minimization, so
-          efficient GPUs can be loaded arbitrarily heavily if that's the cheapest marginal option, which trades
-          off against latency risk. The comparison is against round-robin only (no least-loaded or weighted
-          baseline yet), on a single synthetic trace rather than a real inference log, with no variance reported
-          across multiple runs.
+          efficient GPUs can be loaded arbitrarily heavily if that's the cheapest marginal option. On this demo
+          trace that happens to also produce a lower makespan than either baseline (see Results), but the
+          scheduler has no hard latency or SLA ceiling enforcing that — nothing stops it from overloading an
+          efficient-but-slow GPU on a different trace or fleet shape. Results come from a single synthetic trace
+          rather than a real inference log, with no variance reported across multiple runs, and hardware power
+          and speed profiles are illustrative defaults rather than measurements taken from physical GPUs.
         </p>
       </div>
     </div>

@@ -506,6 +506,13 @@ a {
   flex-basis: 100%;
 }
 
+.hero-result-scale-note {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--color-accent);
+  flex-basis: 100%;
+}
+
 @media (max-width: 560px) {
   .hero-cta-row {
     flex-direction: column;

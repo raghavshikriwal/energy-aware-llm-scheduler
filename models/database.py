@@ -55,17 +55,64 @@ def get_connection() -> Iterator[sqlite3.Connection]:
         conn.close()
 
 
+def _duplicates_last_run(
+    conn: sqlite3.Connection,
+    energy_savings_pct: float,
+    round_robin_total_wh: float,
+    energy_aware_total_wh: float,
+) -> bool:
+    """Check whether the most recent stored run has identical numeric results.
+
+    Repeated "Run Comparison" clicks with an unchanged GPU config produce
+    the exact same numbers every time (the simulation is deterministic), so
+    without this check the history table fills up with rows that are
+    indistinguishable except for timestamp — which reads as a bug rather
+    than as real usage. Comparing against only the single most recent row
+    (not the whole table) is intentional: a genuinely repeated identical
+    result later on, separated by other runs, is still worth keeping as a
+    record of when the user re-tested that config.
+    """
+    last = conn.execute(
+        """
+        SELECT energy_savings_pct, round_robin_total_wh, energy_aware_total_wh
+        FROM comparison_runs
+        ORDER BY id DESC
+        LIMIT 1
+        """
+    ).fetchone()
+
+    if last is None:
+        return False
+
+    return (
+        last["energy_savings_pct"] == energy_savings_pct
+        and last["round_robin_total_wh"] == round_robin_total_wh
+        and last["energy_aware_total_wh"] == energy_aware_total_wh
+    )
+
+
 def save_comparison_run(
     energy_savings_pct: float,
     round_robin_total_wh: float,
     energy_aware_total_wh: float,
     round_robin_gpus: list[dict],
     energy_aware_gpus: list[dict],
-) -> int:
-    """Persist one comparison result. Returns the new row's id."""
+) -> int | None:
+    """Persist one comparison result. Returns the new row's id.
+
+    Skips the insert (returning None) if this result is identical to the
+    immediately preceding run, so back-to-back clicks on the same GPU
+    config don't flood the history table with duplicate rows. See
+    `_duplicates_last_run` for why only the *last* row is checked.
+    """
     created_at = datetime.now(timezone.utc).isoformat()
 
     with get_connection() as conn:
+        if _duplicates_last_run(
+            conn, energy_savings_pct, round_robin_total_wh, energy_aware_total_wh
+        ):
+            return None
+
         cursor = conn.execute(
             """
             INSERT INTO comparison_runs (

@@ -6,6 +6,18 @@ to handle this one request, given its current load, power profile, and
 speed. This is pure greedy energy minimization: the most efficient GPUs
 absorb the most load, even if that means uneven distribution across the
 fleet.
+
+Known limitation — no latency/SLA ceiling: this scheduler currently has
+no hard constraint on per-request or per-GPU completion time. With
+BALANCE_PENALTY_WEIGHT at 0.0, it will keep piling requests onto the most
+energy-efficient GPU even if that GPU is slow, as long as doing so is
+marginally cheaper in energy. The demo trace's makespan numbers (see the
+Results page) happen to come out favorably, but that's a property of this
+particular trace and fleet configuration, not a guarantee — nothing here
+enforces a time-to-first-token or total-latency budget. A production
+version of this scheduler would need an explicit ceiling (e.g. exclude
+any GPU whose projected completion time would exceed a configured SLA)
+before the pure marginal-energy cost comparison in `_cost()` below.
 """
 
 from __future__ import annotations

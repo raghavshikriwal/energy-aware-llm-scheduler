@@ -271,10 +271,33 @@ async function loadSensitivity() {
     if (!res.ok) return;
     const data = await res.json();
     renderSensitivityChart(data.sweep);
+    updateHeroScaleNote(data.sweep);
   } catch (err) {
     // Non-critical enhancement — fail silently and leave the section title
     // + explanation visible without the chart rather than breaking the page.
   }
+}
+
+// Surfaces the strongest point of the heterogeneity sweep (highest savings
+// vs. Round-Robin, which the sweep guarantees is the last/most-heterogeneous
+// point) right next to the flat headline %, so a visitor isn't left with
+// just "3%" as the whole story. Runs independently of updateHeroPreview —
+// whichever of the two API calls (/api/compare, /api/sensitivity) resolves
+// second is the one that actually reveals the note, and each guards its own
+// element so there's no ordering dependency between them.
+function updateHeroScaleNote(sweep) {
+  const noteEl = document.getElementById('hero-result-scale-note');
+  if (!noteEl || !sweep || !sweep.length) return;
+
+  const peak = sweep.reduce((max, pt) =>
+    pt.savings_vs_round_robin_pct > max.savings_vs_round_robin_pct ? pt : max
+  );
+
+  if (peak.savings_vs_round_robin_pct <= 0) return;
+
+  noteEl.textContent =
+    `Scales up to ${peak.savings_vs_round_robin_pct.toFixed(1)}% as fleet heterogeneity grows`;
+  noteEl.hidden = false;
 }
 
 function renderSensitivityChart(sweep) {
