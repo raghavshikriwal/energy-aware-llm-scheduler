@@ -4,6 +4,10 @@
    zone intentionally breaks into a dark "instrument panel" look
    with monospace readouts — a visual signal that this data comes
    off physical hardware, not the light/paper simulator pages.
+   Retheme note: this panel now uses Hyer Aviation's own dark-surface
+   stack (Midnight Hull background, Charcoal Deck cards) instead of a
+   bespoke navy palette, so it reads as part of the same system as the
+   Methodology dark band rather than a one-off.
    ============================================================ */
 
 .live-page {
@@ -121,7 +125,7 @@
 
 .gpu-empty-state {
   grid-column: 1 / -1;
-  color: #b7c0cc;
+  color: var(--color-mid-gray);
   font-size: var(--text-body-sm);
   margin: 0;
   padding: var(--spacing-24) 0;
@@ -129,11 +133,11 @@
 }
 
 .gpu-card {
-  background: #232b38;
-  border: 1px solid #33404f;
+  background: var(--color-charcoal);
+  border: 1px solid rgba(255, 255, 255, 0.14);
   border-radius: var(--radius-links);
   padding: var(--spacing-20);
-  color: #e7ebf0;
+  color: #ffffff;
 }
 
 .gpu-card-title-row {
@@ -145,7 +149,7 @@
 
 .gpu-card-index {
   font-size: var(--text-micro);
-  color: #8b96a5;
+  color: var(--color-mid-gray);
   text-transform: uppercase;
   letter-spacing: 0.08em;
 }
@@ -170,7 +174,7 @@
   display: flex;
   justify-content: space-between;
   padding: 6px 0;
-  border-top: 1px solid #33404f;
+  border-top: 1px solid rgba(255, 255, 255, 0.14);
   font-family: 'SF Mono', ui-monospace, 'Menlo', monospace;
   font-size: var(--text-caption);
 }
@@ -180,16 +184,16 @@
 }
 
 .gpu-stat-label {
-  color: #8b96a5;
+  color: var(--color-mid-gray);
   font-family: var(--font-sf-pro-text);
 }
 
 .gpu-stat-value {
-  color: #e7ebf0;
+  color: #ffffff;
 }
 
 .gpu-stat-value.is-unknown {
-  color: #5c6774;
+  color: rgba(255, 255, 255, 0.4);
   font-style: italic;
 }
 

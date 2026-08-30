@@ -2,19 +2,20 @@ let totalEnergyChartInstance = null;
 let powerChartInstance = null;
 let loadChartInstance = null;
 
-// Round robin (baseline) stays a neutral mid-gray; energy-aware (the
-// contribution) gets the single electric-blue accent — keeps the page's
-// one-accent-color discipline instead of a two-hue comparison palette.
+// Round robin (baseline) stays a neutral Cool Ash; energy-aware (the
+// contribution) gets the single Clay Ember accent — keeps the page's
+// one-accent-color discipline (Hyer Aviation system) instead of a
+// two-hue comparison palette.
 const CHART_PALETTE = {
-  roundRobin: { dark: '#474747', light: '#707070' },
-  energyAware: { dark: '#0060c2', light: '#0071e3' },
+  roundRobin: { dark: '#6e6e74', light: '#8e8e95' },
+  energyAware: { dark: '#a05f45', light: '#bc7155' },
 };
 
-const CHART_GRID_COLOR = 'rgba(29, 29, 31, 0.08)';
-const CHART_TEXT_COLOR = '#707070';
+const CHART_GRID_COLOR = 'rgba(0, 13, 16, 0.08)';
+const CHART_TEXT_COLOR = '#8e8e95';
 
 // Chart.js renders text/gridlines in black by default — make it match the
-// Apple-style theme globally so every chart (current + future) picks this up.
+// Hyer Aviation theme globally so every chart (current + future) picks this up.
 if (typeof Chart !== 'undefined') {
   Chart.defaults.color = CHART_TEXT_COLOR;
   Chart.defaults.borderColor = CHART_GRID_COLOR;

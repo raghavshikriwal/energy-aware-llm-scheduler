@@ -1,7 +1,10 @@
 /* ============================================================
    BASE / RESET
-   Re-themed to the Apple (España) design system — see tokens.css
+   Re-themed to the Hyer Aviation design system — see tokens.css
    for the raw design tokens this file maps onto functional names.
+   Monochrome deep-ink-on-white system with one warm Clay Ember
+   accent, full-pill buttons/nav, hard-edged 0px cards, and a
+   generous 18px/29 body rhythm.
    ============================================================ */
 
 * {
@@ -9,43 +12,47 @@
 }
 
 :root {
-  /* Base surfaces — white canvas, alternating with the pale gray band */
+  /* Base surfaces — white canvas throughout; Hyer has no gray fill
+     surface, so separation between stacked panels comes from hairline
+     borders (added on the card rules below) instead of a tonal shift. */
   --color-bg: var(--color-paper);
   --color-bg-alt: var(--color-canvas);
   --color-card-bg: var(--color-paper);
   --color-card-bg-soft: var(--color-canvas);
 
-  /* Text — Apple ink scale */
+  /* Text — Deep Ink / Cool Ash scale */
   --color-ink: var(--color-primary-ink);
   --color-ink-soft: var(--color-deep-gray);
   --color-muted: var(--color-mid-gray);
 
-  /* Accent — electric blue is the only chromatic UI accent, reserved for
-     filled CTAs; link blue for inline text links. Kept as --color-accent
-     so the rest of this file (and the JS it drives) doesn't need renaming. */
+  /* Accent — Clay Ember is the single warm note in an otherwise
+     monochrome system ("used sparingly... the restraint is the point").
+     Kept as --color-accent so the rest of this file (and the JS it
+     drives) doesn't need renaming. */
   --color-accent: var(--color-electric-blue);
   --color-accent-dark: var(--color-electric-blue-dark);
-  --color-accent-soft: rgba(0, 113, 227, 0.1);
+  --color-accent-soft: rgba(188, 113, 85, 0.12);
   --color-accent-2: var(--color-mid-gray);
   --color-accent-2-dark: var(--color-deep-gray);
-  --color-accent-2-soft: rgba(112, 112, 112, 0.12);
+  --color-accent-2-soft: rgba(142, 142, 149, 0.12);
   --color-link: var(--color-link-blue);
   --color-badge: var(--color-ember);
 
-  /* Borders / lines — hairlines only, used sparingly per the system */
+  /* Borders / lines — Pebble hairlines only, used sparingly per the system */
   --color-border: var(--color-hairline);
-  --color-border-soft: rgba(29, 29, 31, 0.08);
+  --color-border-soft: rgba(0, 13, 16, 0.08);
+  --color-hover-wash: rgba(0, 13, 16, 0.035);
 
   --color-dark-bg: var(--color-paper);
   --color-dark-ink: var(--color-primary-ink);
 
   /* Numeric/stat type keeps the body font with tabular figures rather than
-     a separate monospace family — the Apple system has no monospace role. */
+     a separate monospace family — Hyer has no monospace role either. */
   --font-mono: var(--font-sf-pro-text);
   --font-display: var(--font-sf-pro-display);
   --font-body: var(--font-sf-pro-text);
 
-  /* Radii — cards are always 28px, buttons are always pill-shaped */
+  /* Radii — cards are always a hard 0px edge, buttons are always a full pill */
   --radius-md: var(--radius-links);
   --radius-lg: var(--radius-cards);
   --shadow-soft: none;
@@ -58,11 +65,11 @@ html {
 body {
   margin: 0;
   font-family: var(--font-body);
-  font-size: var(--text-body-sm);
+  font-size: var(--text-body);
   letter-spacing: var(--tracking-body-sm);
   color: var(--color-ink);
   background: var(--color-bg);
-  line-height: 1.47;
+  line-height: 1.61;
   -webkit-font-smoothing: antialiased;
   position: relative;
   overflow-x: hidden;
@@ -173,18 +180,18 @@ code, .history-table, .big-stat-number, .big-stat-unit, .secondary-stat-value,
   gap: 4px;
   width: 34px;
   height: 34px;
-  background: transparent;
-  border: 1px solid var(--color-hairline);
-  border-radius: var(--radius-links);
+  background: var(--color-primary-ink);
+  border: none;
+  border-radius: 100%;
   cursor: pointer;
   padding: 0;
 }
 
 .site-nav-toggle span {
   display: block;
-  width: 16px;
+  width: 14px;
   height: 2px;
-  background: var(--color-dark-ink);
+  background: var(--color-paper);
   transition: transform 0.2s ease, opacity 0.2s ease;
 }
 
@@ -338,7 +345,7 @@ code, .history-table, .big-stat-number, .big-stat-unit, .secondary-stat-value,
 }
 
 .hero-3d-card:first-child {
-  border-color: rgba(0, 113, 227, 0.35);
+  border-color: rgba(188, 113, 85, 0.35);
 }
 
 .hero-3d-tag {
@@ -471,7 +478,7 @@ code, .history-table, .big-stat-number, .big-stat-unit, .secondary-stat-value,
   font-weight: var(--font-weight-regular);
   color: var(--color-primary-ink);
   text-decoration: none;
-  border: 1px solid rgba(29, 29, 31, 0.8);
+  border: 1px solid rgba(0, 13, 16, 0.8);
   border-radius: var(--radius-smallbuttons);
   padding: 11px 16px;
   transition: background 0.15s ease, border-color 0.15s ease;
@@ -490,6 +497,7 @@ code, .history-table, .big-stat-number, .big-stat-unit, .secondary-stat-value,
   flex-wrap: wrap;
   padding: 1rem 1.4rem;
   background: var(--color-canvas);
+  border: 1px solid var(--color-hairline);
   border-radius: var(--radius-cards);
 }
 
@@ -548,6 +556,8 @@ code, .history-table, .big-stat-number, .big-stat-unit, .secondary-stat-value,
   color: var(--color-dark-ink);
   padding: var(--spacing-80) 2rem calc(var(--spacing-80) + 12px);
   text-align: center;
+  border-top: 1px solid var(--color-hairline);
+  border-bottom: 1px solid var(--color-hairline);
 }
 
 .choice-glow {
@@ -588,7 +598,7 @@ code, .history-table, .big-stat-number, .big-stat-unit, .secondary-stat-value,
   display: block;
   text-align: left;
   background: var(--color-paper);
-  border: none;
+  border: 1px solid var(--color-hairline);
   border-radius: var(--radius-cards);
   padding: var(--card-padding) 1.5rem;
   text-decoration: none;
@@ -748,6 +758,7 @@ code, .history-table, .big-stat-number, .big-stat-unit, .secondary-stat-value,
 
 .secondary-stat {
   background: var(--color-canvas);
+  border: 1px solid var(--color-hairline);
   border-radius: var(--radius-cards);
   padding: 1rem 1.25rem;
   text-align: center;
@@ -802,6 +813,7 @@ code, .history-table, .big-stat-number, .big-stat-unit, .secondary-stat-value,
 
 .latency-stat {
   background: var(--color-canvas);
+  border: 1px solid var(--color-hairline);
   border-radius: var(--radius-cards);
   padding: 1rem;
   text-align: center;
@@ -838,7 +850,7 @@ code, .history-table, .big-stat-number, .big-stat-unit, .secondary-stat-value,
 .chart-card {
   position: relative;
   background: var(--color-canvas);
-  border: none;
+  border: 1px solid var(--color-hairline);
   border-radius: var(--radius-cards);
   box-shadow: none;
   padding: var(--card-padding) clamp(1.25rem, 3vw, 2.5rem);
@@ -1033,7 +1045,7 @@ code, .history-table, .big-stat-number, .big-stat-unit, .secondary-stat-value,
 
 /* ============================================================
    INFO SECTIONS (How It Works, Methodology, Author, FAQ)
-   Alternating white / #f5f5f7 bands — Section Header component.
+   Alternating white sections, separated by hairlines — Section Header component.
    ============================================================ */
 
 .info-section {
@@ -1046,11 +1058,22 @@ code, .history-table, .big-stat-number, .big-stat-unit, .secondary-stat-value,
   position: relative;
   background: none;
   max-width: var(--page-max-width);
+  /* Scoped variable overrides — everything inside this section (headings,
+     body copy, code chips, card borders) reads var(--color-ink) etc., so
+     redefining them here flips the whole band to Hyer's Dark Content
+     Section treatment without touching each child rule individually. */
+  --color-ink: var(--color-paper);
+  --color-ink-soft: var(--color-mid-gray);
+  --color-muted: var(--color-mid-gray);
+  --color-paper: var(--color-charcoal);
+  --color-hairline: rgba(255, 255, 255, 0.16);
+  --color-cool-wash: rgba(255, 255, 255, 0.08);
+  --color-link: var(--color-electric-blue);
 }
 
-/* Full-bleed gray band behind the content, while the content itself keeps
-   the same max-width as every other section — this is what was making the
-   Methodology grid stretch edge-to-edge with nothing to break it up. */
+/* Full-bleed dark band behind the content, while the content itself keeps
+   the same max-width as every other section — Midnight Hull, per Hyer's
+   Dark Content Section (the stacked Charcoal Deck info-blocks sit on top). */
 .info-section-alt::before {
   content: "";
   position: absolute;
@@ -1059,7 +1082,7 @@ code, .history-table, .big-stat-number, .big-stat-unit, .secondary-stat-value,
   left: 50%;
   width: 100vw;
   transform: translateX(-50%);
-  background: var(--color-canvas);
+  background: var(--color-midnight);
   z-index: -1;
 }
 
@@ -1180,6 +1203,7 @@ code, .history-table, .big-stat-number, .big-stat-unit, .secondary-stat-value,
   margin-top: 1.25rem;
   padding: 1.1rem 1.3rem;
   background: var(--color-canvas);
+  border: 1px solid var(--color-hairline);
   border-radius: var(--radius-cards);
   font-size: var(--text-caption);
   line-height: 1.6;
@@ -1314,7 +1338,7 @@ code, .history-table, .big-stat-number, .big-stat-unit, .secondary-stat-value,
 }
 
 .history-table tbody tr:hover {
-  background: var(--color-canvas);
+  background: var(--color-hover-wash);
 }
 
 .history-table td.savings-positive {
@@ -1337,7 +1361,7 @@ code, .history-table, .big-stat-number, .big-stat-unit, .secondary-stat-value,
 
 .page-footer {
   text-align: center;
-  background: var(--color-canvas);
+  background: var(--color-primary-ink);
   padding: 3rem 2rem 4rem;
   color: var(--color-mid-gray);
   font-size: var(--text-micro);
@@ -1410,6 +1434,7 @@ code, .history-table, .big-stat-number, .big-stat-unit, .secondary-stat-value,
   -webkit-overflow-scrolling: touch;
   scrollbar-width: thin;
   scrollbar-color: var(--color-hairline) transparent;
+  border: 1px solid var(--color-hairline);
   border-radius: var(--radius-cards);
   background: var(--color-canvas);
   padding: 1.5rem 1.25rem;
