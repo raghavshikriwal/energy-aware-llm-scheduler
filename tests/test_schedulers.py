@@ -58,16 +58,20 @@ def test_round_robin_ignores_load_and_efficiency(sample_requests):
     assert gpus[1].current_load == (200 + 100) + (300 + 150)
 
 
-def test_round_robin_uniform_fleet_balances_load_evenly(sample_requests):
-    """A perfectly divisible, uniform-hardware fleet should end up balanced."""
+def test_round_robin_uniform_fleet_balances_request_count_evenly(sample_requests):
+    """Round-robin balances by request COUNT, not by token load — with a
+    perfectly divisible request count it should distribute requests evenly
+    across GPUs, even though per-GPU token load may differ depending on
+    which requests happen to land where (e.g. repeating a fixed-size batch
+    means the same GPU can always catch the biggest request in the batch)."""
     gpus = round_robin_schedule(
         sample_requests * 4,  # 16 requests, evenly divisible by 4 GPUs
         num_gpus=4,
         efficiency_factors=[1.0, 1.0, 1.0, 1.0],
         compute_capabilities=[1.0, 1.0, 1.0, 1.0],
     )
-    loads = [gpu.current_load for gpu in gpus]
-    assert max(loads) == min(loads)
+    counts = [gpu.request_count for gpu in gpus]
+    assert max(counts) == min(counts) == 4
 
 
 # --- Least-loaded ------------------------------------------------------------
