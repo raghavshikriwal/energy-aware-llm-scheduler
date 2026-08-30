@@ -1093,13 +1093,10 @@ code, .history-table, .big-stat-number, .big-stat-unit, .secondary-stat-value,
    of information instead of one continuous wall of copy. Background flips
    relative to the section so it always contrasts with its surroundings. */
 .info-block {
-  background: var(--color-canvas);
+  background: var(--color-paper);
+  border: 1px solid var(--color-hairline);
   border-radius: var(--radius-cards);
   padding: 1.5rem 1.5rem 1.75rem;
-}
-
-.info-section-alt .info-block {
-  background: var(--color-paper);
 }
 
 .info-block h3 {
