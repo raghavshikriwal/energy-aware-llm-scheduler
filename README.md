@@ -2,7 +2,7 @@
 
 A Cloud Computing course project comparing a naive round-robin scheduler against a smarter energy-aware scheduler for routing LLM inference requests across a simulated, heterogeneous GPU fleet.
 
-**Live demo:** _[Render link — pending deployment]_
+**Live demo:** https://energy-aware-llm-scheduler.onrender.com
 
 ---
 
@@ -42,12 +42,26 @@ This was confirmed empirically: widening the efficiency/speed gap between the be
 
 ## Architecture
 
-
 `energy_aware_scheduler.py` imports its `GPUNode` dataclass and shared utilities directly from `round_robin_scheduler.py` — there is no duplicated scheduling infrastructure between the two schedulers.
 
 ## Data persistence
 
 Every comparison run is saved to a local SQLite database (`scheduler_runs.db`), so results aren't lost between requests. Past runs are retrievable via `GET /api/history`.
+
+## Testing
+
+The scheduler logic and API are covered by a pytest suite (`tests/`) — 26 tests, 92% coverage — including empty-input edge cases, per-scheduler behavior, request validation, and a regression test asserting energy-aware scheduling never does worse than round-robin. Requests are validated with Pydantic schemas (`models/schemas.py`), and invalid input returns a structured JSON error (`models/exceptions.py`) instead of a raw stack trace.
+
+Tests run automatically on every push via GitHub Actions (`.github/workflows/tests.yml`).
+
+```bash
+pytest
+```
+
+## Known limitations
+
+- **Ephemeral storage on Render's free tier:** the SQLite database (`scheduler_runs.db`) lives on local disk, which resets on every redeploy and after the free instance spins down from inactivity. `/api/history` will lose past runs when that happens — this is a hosting-tier constraint, not an application bug.
+- **Free-tier cold starts:** the live instance spins down after ~15 minutes idle; the first request after that can take 50+ seconds to respond.
 
 ## Tech stack
 
@@ -89,6 +103,3 @@ Then open `http://127.0.0.1:5000`.
 ## Author
 
 Raghav Shikriwal — BTech IT, NSUT
-
-## LIVE LINK BELOW
-https://energy-aware-llm-scheduler.onrender.com
