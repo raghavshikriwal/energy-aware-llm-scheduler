@@ -7,44 +7,45 @@
 }
 
 :root {
-  /* Base surfaces */
-  --color-bg: #060907;
-  --color-bg-alt: #0b110d;
-  --color-card-bg: #101811;
-  --color-card-bg-soft: #0e1310;
+  /* Base surfaces — Harvest-style warm cream canvas + white cards */
+  --color-bg: #fff8f1;
+  --color-bg-alt: #fdefdd;
+  --color-card-bg: #ffffff;
+  --color-card-bg-soft: #fff8f1;
 
-  /* Text */
-  --color-ink: #f5f2ea;
-  --color-ink-soft: #c3c9c2;
-  --color-muted: #9aa49d;
+  /* Text — warm near-black, never pure #000 */
+  --color-ink: #1d1e1c;
+  --color-ink-soft: #4a4a47;
+  --color-muted: #615f5c;
 
-  /* Accent — amber primary, teal secondary. Deliberately not mint-on-black,
-     which has become the default "AI startup" palette; this pairing still
-     reads as technical/precise but is visually distinct. */
-  --color-accent: #f5a623;
-  --color-accent-dark: #c97f0f;
-  --color-accent-soft: rgba(245, 166, 35, 0.12);
-  --color-accent-2: #4fd1c5;
-  --color-accent-2-dark: #2ba89c;
-  --color-accent-2-soft: rgba(79, 209, 197, 0.12);
-  --color-gold: #d9c9ad;
-  --color-orange: #ff9b62;
+  /* Accent — one vivid orange carries all the energy; the second series
+     stays a neutral warm gray so the orange remains the only chromatic
+     decision on the page (Harvest's single-accent discipline). */
+  --color-accent: #fa5d00;
+  --color-accent-dark: #d94f00;
+  --color-accent-soft: rgba(250, 93, 0, 0.1);
+  --color-accent-2: #8e8b87;
+  --color-accent-2-dark: #4a4a47;
+  --color-accent-2-soft: rgba(142, 139, 135, 0.12);
+  --color-gold: #fee3b5;
+  --color-orange: #ff8a42;
 
-  /* Borders / lines */
-  --color-border: rgba(255, 255, 255, 0.1);
-  --color-border-soft: rgba(255, 255, 255, 0.06);
+  /* Borders / lines — dark-tinted hairlines on the light canvas */
+  --color-border: rgba(29, 30, 28, 0.12);
+  --color-border-soft: rgba(29, 30, 28, 0.06);
 
-  /* Kept for hero/choice sections which were already dark */
-  --color-dark-bg: #060907;
-  --color-dark-ink: #f5f2ea;
+  /* Kept for compatibility with hero/choice sections; unified with the
+     cream canvas so the whole page lives on one warm background. */
+  --color-dark-bg: #fff8f1;
+  --color-dark-ink: #1d1e1c;
 
   /* Monospace for stats/numbers */
   --font-mono: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
   --font-display: 'Fraunces', Georgia, serif;
   --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-  --radius-md: 12px;
+  --radius-md: 16px;
   --radius-lg: 20px;
-  --shadow-soft: 0 25px 80px rgba(0, 0, 0, 0.35);
+  --shadow-soft: 0 20px 60px rgba(227, 214, 197, 0.7), 0 4px 16px rgba(29, 30, 28, 0.05);
 }
 
 html {
@@ -66,8 +67,8 @@ body::before {
   position: fixed;
   inset: 0;
   pointer-events: none;
-  opacity: 0.15;
-  background-image: radial-gradient(circle, #2c5b40 1px, transparent 1px);
+  opacity: 0.5;
+  background-image: radial-gradient(circle, var(--color-parchment-shadow, #e3d6c5) 1px, transparent 1px);
   background-size: 150px 150px;
   z-index: 0;
 }
@@ -95,8 +96,8 @@ a {
   position: sticky;
   top: 0;
   z-index: 50;
-  background: rgba(6, 9, 7, 0.82);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  background: rgba(255, 248, 241, 0.85);
+  border-bottom: 1px solid rgba(29, 30, 28, 0.08);
 }
 
 @supports (backdrop-filter: blur(10px)) or (-webkit-backdrop-filter: blur(10px)) {
@@ -134,7 +135,7 @@ a {
 .site-nav-link {
   font-size: 0.85rem;
   font-weight: 500;
-  color: rgba(245, 243, 238, 0.72);
+  color: rgba(29, 30, 28, 0.7);
   text-decoration: none;
   padding: 0.35rem 0.1rem;
   border-bottom: 2px solid transparent;
@@ -168,7 +169,7 @@ a {
   width: 34px;
   height: 34px;
   background: transparent;
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(29, 30, 28, 0.18);
   border-radius: 8px;
   cursor: pointer;
   padding: 0;
@@ -207,8 +208,8 @@ a {
     flex-direction: column;
     align-items: stretch;
     gap: 0;
-    background: rgba(11, 15, 13, 0.97);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(255, 248, 241, 0.97);
+    border-bottom: 1px solid rgba(29, 30, 28, 0.08);
     max-height: 0;
     overflow: hidden;
     transition: max-height 0.25s ease;
@@ -221,13 +222,13 @@ a {
 
   .site-nav-link {
     padding: 0.9rem clamp(1.25rem, 4vw, 2.5rem);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    border-bottom: 1px solid rgba(29, 30, 28, 0.06);
     border-left: 2px solid transparent;
   }
 
   .site-nav-link.is-active {
     border-left-color: var(--color-accent);
-    background: rgba(245, 166, 35, 0.06);
+    background: rgba(250, 93, 0, 0.06);
   }
 
   .secondary-stats,
@@ -246,7 +247,7 @@ a {
   display: flex;
   align-items: center;
   overflow: hidden;
-  background: radial-gradient(ellipse at top left, #10221a 0%, var(--color-dark-bg) 60%);
+  background: radial-gradient(ellipse at top left, var(--color-gold) 0%, var(--color-dark-bg) 60%);
   color: var(--color-dark-ink);
   padding: 2.5rem 0;
 }
@@ -317,9 +318,9 @@ a {
   height: 92px;
   padding: 1.1rem 1.3rem;
   border-radius: 14px;
-  border: 1px solid rgba(245, 166, 35, 0.22);
-  background: linear-gradient(150deg, rgba(20, 32, 24, 0.92), rgba(8, 14, 10, 0.94));
-  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.45);
+  border: 1px solid rgba(250, 93, 0, 0.22);
+  background: linear-gradient(150deg, rgba(255, 255, 255, 0.96), rgba(255, 248, 241, 0.92));
+  box-shadow: 0 25px 60px rgba(29, 30, 28, 0.14);
   transform: translateZ(calc(var(--depth) * -46px));
   display: flex;
   flex-direction: column;
@@ -329,8 +330,8 @@ a {
 }
 
 .hero-3d-card:first-child {
-  border-color: rgba(245, 166, 35, 0.55);
-  box-shadow: 0 0 0 1px rgba(245, 166, 35, 0.12), 0 30px 70px rgba(201, 127, 15, 0.18);
+  border-color: rgba(250, 93, 0, 0.55);
+  box-shadow: 0 0 0 1px rgba(250, 93, 0, 0.14), 0 30px 70px rgba(217, 79, 0, 0.16);
 }
 
 .hero-3d-tag {
@@ -359,7 +360,7 @@ a {
 .hero-3d-meter {
   height: 4px;
   border-radius: 4px;
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(29, 30, 28, 0.08);
   overflow: hidden;
 }
 
@@ -378,7 +379,7 @@ a {
   height: 10px;
   border-radius: 50%;
   background: var(--color-accent);
-  box-shadow: 0 0 18px 4px rgba(245, 166, 35, 0.55);
+  box-shadow: 0 0 18px 4px rgba(250, 93, 0, 0.55);
   transform: translateZ(20px);
   animation: hero-packet-travel 3.2s cubic-bezier(0.45, 0.05, 0.25, 1) infinite;
 }
@@ -415,7 +416,7 @@ a {
 
 .hero-subtitle {
   font-size: clamp(1.05rem, 1.6vw, 1.3rem);
-  color: rgba(245, 243, 238, 0.78);
+  color: rgba(29, 30, 28, 0.72);
   max-width: 60ch;
   margin-bottom: 2rem;
 }
@@ -435,11 +436,11 @@ a {
   align-items: center;
   gap: 0.5rem;
   background: var(--color-accent);
-  color: #06210f;
+  color: #ffffff;
   font-weight: 700;
   font-size: 0.95rem;
   padding: 0.85rem 1.5rem;
-  border-radius: 10px;
+  border-radius: var(--radius-md);
   text-decoration: none;
   transition: background 0.18s ease-out, transform 0.2s ease-out;
 }
@@ -457,9 +458,9 @@ a {
   align-items: center;
   font-size: 0.95rem;
   font-weight: 600;
-  color: rgba(245, 243, 238, 0.85);
+  color: rgba(29, 30, 28, 0.78);
   text-decoration: none;
-  border-bottom: 1px solid rgba(245, 243, 238, 0.3);
+  border-bottom: 1px solid rgba(29, 30, 28, 0.25);
   padding-bottom: 2px;
   transition: color 0.15s ease, border-color 0.15s ease;
 }
@@ -477,8 +478,8 @@ a {
   gap: 0.9rem;
   flex-wrap: wrap;
   padding: 1rem 1.4rem;
-  background: rgba(245, 166, 35, 0.08);
-  border: 1px solid rgba(245, 166, 35, 0.25);
+  background: rgba(250, 93, 0, 0.08);
+  border: 1px solid rgba(250, 93, 0, 0.25);
   border-radius: var(--radius-md);
 }
 
@@ -519,8 +520,8 @@ a {
   .hero-cta-secondary {
     justify-content: center;
     text-align: center;
-    border: 1px solid rgba(245, 243, 238, 0.3);
-    border-radius: 10px;
+    border: 1px solid rgba(29, 30, 28, 0.25);
+    border-radius: var(--radius-md);
     padding: 0.75rem 1.5rem;
   }
 }
@@ -532,7 +533,7 @@ a {
 .choice-section {
   position: relative;
   overflow: hidden;
-  background: var(--color-dark-bg);
+  background: var(--color-bg-alt);
   color: var(--color-dark-ink);
   padding: 6rem 2rem 7rem;
   text-align: center;
@@ -546,7 +547,7 @@ a {
   height: 480px;
   margin-left: -240px;
   margin-top: -240px;
-  background: radial-gradient(circle, rgba(39, 174, 96, 0.25) 0%, rgba(39, 174, 96, 0) 70%);
+  background: radial-gradient(circle, rgba(254, 227, 181, 0.7) 0%, rgba(254, 227, 181, 0) 70%);
   pointer-events: none;
   transition: transform 0.05s linear;
   will-change: transform;
@@ -557,7 +558,7 @@ a {
   font-size: 0.8rem;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--color-gold);
+  color: var(--color-accent);
   font-weight: 600;
   margin-bottom: 0.75rem;
 }
@@ -582,8 +583,8 @@ a {
   position: relative;
   display: block;
   text-align: left;
-  background: linear-gradient(160deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: linear-gradient(160deg, #ffffff, rgba(255, 248, 241, 0.9));
+  border: 1px solid rgba(29, 30, 28, 0.1);
   border-radius: 16px;
   padding: 1.75rem 1.5rem;
   text-decoration: none;
@@ -594,9 +595,9 @@ a {
 }
 
 .choice-card:hover {
-  border-color: rgba(245, 166, 35, 0.5);
+  border-color: rgba(250, 93, 0, 0.5);
   transform: translateY(-3px);
-  box-shadow: 0 15px 35px rgba(201, 127, 15, 0.1);
+  box-shadow: 0 15px 35px rgba(217, 79, 0, 0.14);
 }
 
 .choice-card:active {
@@ -608,7 +609,7 @@ a {
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(105deg, transparent, rgba(245, 166, 35, 0.07), transparent);
+  background: linear-gradient(105deg, transparent, rgba(250, 93, 0, 0.07), transparent);
   transform: translateX(-100%);
   transition: transform 0.6s ease;
   pointer-events: none;
@@ -622,7 +623,7 @@ a {
   display: block;
   font-family: var(--font-display);
   font-size: 0.85rem;
-  color: var(--color-gold);
+  color: var(--color-accent);
   margin-bottom: 1rem;
   letter-spacing: 0.05em;
 }
@@ -636,7 +637,7 @@ a {
 .choice-card p {
   font-size: 0.9rem;
   line-height: 1.5;
-  color: rgba(245, 243, 238, 0.7);
+  color: var(--color-muted);
   margin: 0 0 1.25rem;
 }
 
@@ -687,7 +688,7 @@ a {
   color: var(--color-accent);
   letter-spacing: -0.02em;
   font-variant-numeric: tabular-nums;
-  text-shadow: 0 0 40px rgba(245, 166, 35, 0.35);
+  text-shadow: 0 0 32px rgba(250, 93, 0, 0.22);
 }
 
 .big-stat-unit {
@@ -712,7 +713,7 @@ a {
   font-family: var(--font-mono);
   color: var(--color-accent);
   background: var(--color-accent-soft);
-  border: 1px solid rgba(245, 166, 35, 0.25);
+  border: 1px solid rgba(250, 93, 0, 0.25);
   border-radius: var(--radius-md);
   padding: 1.25rem 1.5rem;
   margin-bottom: 2rem;
@@ -724,9 +725,9 @@ a {
 }
 
 .summary-badge.is-error {
-  color: #fca5a5;
-  background: rgba(248, 113, 113, 0.1);
-  border-color: rgba(248, 113, 113, 0.3);
+  color: #b91c1c;
+  background: rgba(220, 38, 38, 0.08);
+  border-color: rgba(220, 38, 38, 0.25);
 }
 
 .secondary-stats {
@@ -737,8 +738,8 @@ a {
 }
 
 .secondary-stat {
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.07);
+  background: var(--color-bg);
+  border: 1px solid var(--color-border-soft);
   border-radius: var(--radius-md);
   padding: 1rem 1.25rem;
   text-align: center;
@@ -768,10 +769,12 @@ a {
 }
 
 /* Alternate panel treatment for the sensitivity / latency sections, so the
-   page isn't every block using identical card styling in sequence. */
+   page isn't every block using identical card styling in sequence. Uses the
+   neutral accent-2 tone rather than a second hue, keeping orange the only
+   chromatic accent on the page. */
 .chart-card.variant-teal {
-  border-color: rgba(79, 209, 197, 0.18);
-  background: linear-gradient(180deg, rgba(79, 209, 197, 0.04), var(--color-card-bg) 60%);
+  border-color: rgba(142, 139, 135, 0.22);
+  background: linear-gradient(180deg, rgba(142, 139, 135, 0.05), var(--color-card-bg) 60%);
 }
 
 .chart-card.variant-teal .chart-title {
@@ -786,8 +789,8 @@ a {
 }
 
 .latency-stat {
-  background: rgba(79, 209, 197, 0.05);
-  border: 1px solid rgba(79, 209, 197, 0.15);
+  background: rgba(142, 139, 135, 0.08);
+  border: 1px solid rgba(142, 139, 135, 0.2);
   border-radius: var(--radius-md);
   padding: 1rem;
   text-align: center;
@@ -816,47 +819,9 @@ a {
   line-height: 1.6;
 }
 
-.secondary-stats {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 1rem;
-  margin-bottom: 0.75rem;
-}
-
-.secondary-stat {
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.07);
-  border-radius: var(--radius-md);
-  padding: 1rem 1.25rem;
-  text-align: center;
-}
-
-.secondary-stat-value {
-  display: block;
-  font-family: var(--font-mono);
-  font-size: 1.4rem;
-  font-weight: 600;
-  color: var(--color-accent);
-  margin-bottom: 0.25rem;
-}
-
-.secondary-stat-label {
-  display: block;
-  font-size: 0.78rem;
-  color: var(--color-text-muted, #9aa39a);
-  letter-spacing: 0.01em;
-}
-
-.scale-disclaimer {
-  font-size: 0.75rem;
-  color: var(--color-text-muted, #7d867d);
-  margin-bottom: 2rem;
-  line-height: 1.5;
-}
-
 .chart-card {
   position: relative;
-  background: linear-gradient(145deg, rgba(18, 28, 21, 0.94), rgba(8, 13, 10, 0.96));
+  background: linear-gradient(145deg, #ffffff, rgba(255, 248, 241, 0.96));
   border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-soft);
@@ -870,7 +835,7 @@ a {
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.05), transparent 40%);
+  background: linear-gradient(180deg, rgba(29, 30, 28, 0.02), transparent 40%);
   pointer-events: none;
 }
 
@@ -882,14 +847,14 @@ a {
   width: 140%;
   height: 140%;
   transform: translateX(-50%);
-  background: radial-gradient(circle, rgba(245, 166, 35, 0.08), transparent 60%);
+  background: radial-gradient(circle, rgba(250, 93, 0, 0.06), transparent 60%);
   pointer-events: none;
 }
 
 .chart-card:hover {
   transform: translateY(-2px);
-  border-color: rgba(245, 166, 35, 0.25);
-  box-shadow: 0 30px 90px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(245, 166, 35, 0.08);
+  border-color: rgba(250, 93, 0, 0.25);
+  box-shadow: 0 20px 50px rgba(29, 30, 28, 0.1), 0 0 0 1px rgba(250, 93, 0, 0.08);
 }
 
 .chart-card > * {
@@ -943,7 +908,7 @@ a {
 }
 
 .gpu-control-card:hover {
-  border-color: rgba(255, 255, 255, 0.18);
+  border-color: rgba(29, 30, 28, 0.18);
 }
 
 .gpu-control-card h3 {
@@ -977,7 +942,7 @@ a {
   appearance: none;
   height: 5px;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.12);
+  background: rgba(29, 30, 28, 0.12);
   outline: none;
   margin-bottom: 1rem;
   cursor: pointer;
@@ -1005,11 +970,11 @@ a {
 }
 
 .slider-speed::-webkit-slider-thumb {
-  background: #2980b9;
+  background: var(--color-ink-soft);
 }
 
 .slider-speed::-moz-range-thumb {
-  background: #2980b9;
+  background: var(--color-ink-soft);
 }
 
 /* ---- Run button ---- */
@@ -1017,10 +982,10 @@ a {
 .run-btn {
   position: relative;
   background: var(--color-accent);
-  color: #061008;
+  color: #ffffff;
   border: none;
   padding: 0.8rem 1.6rem;
-  border-radius: 10px;
+  border-radius: var(--radius-md);
   font-size: 0.95rem;
   font-weight: 650;
   font-family: inherit;
@@ -1035,7 +1000,7 @@ a {
 .run-btn:hover:not(:disabled) {
   background: var(--color-accent-dark);
   transform: translateY(-1px);
-  box-shadow: 0 8px 24px rgba(245, 166, 35, 0.25);
+  box-shadow: 0 8px 24px rgba(250, 93, 0, 0.25);
 }
 
 .run-btn:active:not(:disabled) {
@@ -1184,7 +1149,7 @@ a {
   margin-top: 1.25rem;
   padding: 1.1rem 1.3rem;
   background: var(--color-accent-soft);
-  border: 1px solid rgba(245, 166, 35, 0.25);
+  border: 1px solid rgba(250, 93, 0, 0.25);
   border-radius: 10px;
   font-size: 0.92rem;
   line-height: 1.6;
@@ -1202,9 +1167,9 @@ a {
 }
 
 .faq-answer-empty {
-  background: rgba(248, 113, 113, 0.1);
-  border-color: rgba(248, 113, 113, 0.3);
-  color: #fca5a5;
+  background: rgba(220, 38, 38, 0.08);
+  border-color: rgba(220, 38, 38, 0.25);
+  color: #b91c1c;
 }
 
 .faq-suggestions {
@@ -1242,23 +1207,23 @@ a {
   pointer-events: none;
   opacity: 0;
   transform: translate(-50%, calc(-100% - 10px));
-  background: rgba(10, 16, 12, 0.94);
+  background: rgba(29, 30, 28, 0.94);
   backdrop-filter: blur(10px);
-  border: 1px solid rgba(245, 166, 35, 0.3);
+  border: 1px solid rgba(250, 93, 0, 0.35);
   border-radius: 10px;
   padding: 0.65rem 0.85rem;
   font-family: var(--font-mono);
   font-size: 0.78rem;
-  color: var(--color-ink);
+  color: #fff8f1;
   white-space: nowrap;
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 12px 30px rgba(29, 30, 28, 0.35);
   transition: opacity 0.1s ease;
   z-index: 5;
 }
 
 .chart-tooltip-title {
   font-weight: 700;
-  color: var(--color-ink-soft);
+  color: rgba(255, 248, 241, 0.75);
   margin-bottom: 0.35rem;
   font-size: 0.7rem;
 }
@@ -1323,7 +1288,7 @@ a {
 }
 
 .history-table tbody tr:hover {
-  background: rgba(255, 255, 255, 0.03);
+  background: rgba(29, 30, 28, 0.03);
 }
 
 .history-table td.savings-positive {
@@ -1331,7 +1296,7 @@ a {
 }
 
 .history-table td.savings-negative {
-  color: #fca5a5;
+  color: #b91c1c;
 }
 
 .history-empty {
@@ -1361,7 +1326,7 @@ a {
   font-family: var(--font-mono);
   font-size: 0.88em;
   background: var(--color-accent-soft);
-  border: 1px solid rgba(245, 166, 35, 0.25);
+  border: 1px solid rgba(250, 93, 0, 0.25);
   color: var(--color-accent);
   padding: 0.35rem 0.75rem;
   border-radius: 8px;

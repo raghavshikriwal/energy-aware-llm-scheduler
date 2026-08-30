@@ -2,21 +2,24 @@ let totalEnergyChartInstance = null;
 let powerChartInstance = null;
 let loadChartInstance = null;
 
+// Round robin (baseline) stays a neutral warm gray; energy-aware (the
+// contribution) gets the single vivid orange accent — keeps the page's
+// one-accent-color discipline instead of a two-hue comparison palette.
 const CHART_PALETTE = {
-  roundRobin: { dark: '#c2620f', light: '#f4a259' },
-  energyAware: { dark: '#2ba89c', light: '#4fd1c5' },
+  roundRobin: { dark: '#4a4a47', light: '#8e8b87' },
+  energyAware: { dark: '#d94f00', light: '#fa5d00' },
 };
 
 const CHART_GLOW = {
-  roundRobin: 'rgba(244, 162, 89, 0.35)',
-  energyAware: 'rgba(79, 209, 197, 0.4)',
+  roundRobin: 'rgba(142, 139, 135, 0.3)',
+  energyAware: 'rgba(250, 93, 0, 0.35)',
 };
 
-const CHART_GRID_COLOR = 'rgba(255, 255, 255, 0.05)';
-const CHART_TEXT_COLOR = '#c3c9c2';
+const CHART_GRID_COLOR = 'rgba(29, 30, 28, 0.08)';
+const CHART_TEXT_COLOR = '#615f5c';
 
 // Chart.js renders text/gridlines in black by default — make it match the
-// dark theme globally so every chart (current + future) picks this up.
+// warm cream theme globally so every chart (current + future) picks this up.
 if (typeof Chart !== 'undefined') {
   Chart.defaults.color = CHART_TEXT_COLOR;
   Chart.defaults.borderColor = CHART_GRID_COLOR;

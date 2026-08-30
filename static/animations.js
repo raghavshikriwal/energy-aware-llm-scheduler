@@ -2,8 +2,8 @@
 
 const PARTICLE_COUNT = 42;
 const CONNECT_DISTANCE = 130;
-const PARTICLE_COLOR = "rgba(74, 222, 128, 0.7)";
-const LINE_COLOR = "rgba(74, 222, 128, 0.15)";
+const PARTICLE_COLOR = "rgba(250, 93, 0, 0.55)";
+const LINE_COLOR = "rgba(29, 30, 28, 0.08)";
 const PARTICLE_SPEED = 0.3;
 
 class Particle {
