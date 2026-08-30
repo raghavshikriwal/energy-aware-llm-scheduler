@@ -1386,3 +1386,140 @@ code, .history-table, .big-stat-number, .big-stat-unit, .secondary-stat-value,
     filter: none;
   }
 }
+/* ============================================================
+   ARCHITECTURE FLOW DIAGRAM
+   ============================================================ */
+
+.arch-diagram {
+  margin-top: 2.5rem;
+  width: 100%;
+}
+
+.arch-diagram-label {
+  font-family: var(--font-sf-pro-text);
+  font-size: var(--text-caption);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+  font-weight: var(--font-weight-medium);
+  margin: 0 0 0.85rem;
+}
+
+.arch-diagram-scroll {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-hairline) transparent;
+  border-radius: var(--radius-cards);
+  background: var(--color-canvas);
+  padding: 1.5rem 1.25rem;
+}
+
+.arch-diagram-scroll::-webkit-scrollbar { height: 4px; }
+.arch-diagram-scroll::-webkit-scrollbar-track { background: transparent; }
+.arch-diagram-scroll::-webkit-scrollbar-thumb { background: var(--color-hairline); border-radius: 999px; }
+
+.arch-diagram-scroll svg {
+  display: block;
+  width: 100%;
+  max-width: 760px;
+  min-width: 520px;
+  margin: 0 auto;
+  height: auto;
+}
+
+/* ============================================================
+   LIVE DEMO BANNER
+   ============================================================ */
+
+.demo-banner {
+  background: var(--color-canvas);
+  border-top: 1px solid var(--color-hairline);
+  border-bottom: 1px solid var(--color-hairline);
+  padding: clamp(2rem, 5vw, 3.5rem) clamp(1.25rem, 4vw, 2.5rem);
+}
+
+.demo-banner-inner {
+  max-width: 900px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 2.5rem;
+  flex-wrap: wrap;
+}
+
+.demo-banner-text { flex: 1 1 320px; }
+.demo-banner-eyebrow { margin-bottom: 0.5rem; }
+
+.demo-banner-heading {
+  font-family: var(--font-display);
+  font-size: clamp(1.4rem, 3vw, 2rem);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: 0.007em;
+  margin: 0 0 0.75rem;
+  color: var(--color-ink);
+}
+
+.demo-banner-desc {
+  font-size: var(--text-body-sm);
+  letter-spacing: var(--tracking-body-sm);
+  color: var(--color-muted);
+  line-height: 1.55;
+  margin: 0;
+  max-width: 56ch;
+}
+
+.demo-banner-actions {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.6rem;
+}
+
+.demo-banner-cta { white-space: nowrap; }
+
+.demo-banner-note {
+  font-size: var(--text-caption);
+  color: var(--color-muted);
+  margin: 0;
+  line-height: 1.4;
+}
+
+.demo-banner-video {
+  width: 100%;
+  max-width: 560px;
+  border-radius: var(--radius-cards);
+  border: none;
+  display: block;
+}
+
+/* ============================================================
+   MOBILE RESPONSIVENESS — ADDITIONAL BREAKPOINTS
+   ============================================================ */
+
+@media (max-width: 480px) {
+  .gpu-controls { grid-template-columns: 1fr; }
+  .controls-header { flex-direction: column; align-items: stretch; }
+  .controls-header .run-btn { width: 100%; justify-content: center; }
+}
+
+@media (max-width: 560px) {
+  .info-grid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 480px) {
+  .secondary-stats,
+  .latency-stats { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 420px) {
+  .faq-input-row { flex-direction: column; }
+  .faq-input-row .run-btn { width: 100%; justify-content: center; }
+}
+
+@media (max-width: 560px) {
+  .demo-banner-inner { flex-direction: column; gap: 1.5rem; }
+  .demo-banner-actions { width: 100%; align-items: stretch; }
+  .demo-banner-cta { width: 100%; justify-content: center; }
+}

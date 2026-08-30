@@ -140,6 +140,29 @@
     </div>
   </section>
 
+  <!-- LIVE DEMO BANNER -->
+  <section class="demo-banner" id="demo-banner">
+    <div class="demo-banner-inner">
+      <div class="demo-banner-text">
+        <span class="info-eyebrow demo-banner-eyebrow">Live Demo</span>
+        <h2 class="demo-banner-heading">See it run in real time</h2>
+        <p class="demo-banner-desc">Prefer a visual walkthrough over tweaking sliders? The hosted deployment lets you run the full scheduler comparison — round-robin vs. least-loaded vs. energy-aware — instantly in your browser, no install needed.</p>
+      </div>
+      <div class="demo-banner-actions">
+        <a href="https://energy-aware-llm-scheduler.onrender.com"
+           target="_blank" rel="noopener"
+           class="hero-cta-primary demo-banner-cta">
+          Open Live Demo →
+        </a>
+        <p class="demo-banner-note">⚠ Free-tier cold start may take ~50 s on first load</p>
+        <!-- To embed a recorded walkthrough, replace the <a> above with:
+             <iframe src="YOUR_YOUTUBE_OR_LOOM_EMBED_URL"
+                     width="100%" height="315" frameborder="0" allowfullscreen
+                     class="demo-banner-video"></iframe> -->
+      </div>
+    </div>
+  </section>
+
   <!-- DASHBOARD -->
   <main id="dashboard">
     <div class="big-stat reveal" id="big-stat">
@@ -276,6 +299,62 @@
       <div class="info-block">
         <h3>Greedy by design</h3>
         <p>Every request goes to whichever GPU has the lowest marginal cost at that moment. No global optimization, no lookahead — just a fast, honest, physically grounded decision made fresh for every request.</p>
+      </div>
+    </div>
+
+    <!-- ARCHITECTURE FLOW DIAGRAM -->
+    <div class="arch-diagram" aria-label="System architecture: Incoming Requests flow into the Scheduler, which routes to the GPU Fleet, producing Metrics">
+      <p class="arch-diagram-label">System Architecture</p>
+      <div class="arch-diagram-scroll">
+        <svg viewBox="0 0 760 180" xmlns="http://www.w3.org/2000/svg" role="img" aria-hidden="true" focusable="false">
+          <defs>
+            <marker id="arch-arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+              <polygon points="0 0, 8 3, 0 6" fill="#0071e3"/>
+            </marker>
+          </defs>
+
+          <!-- Node 1 — Incoming Requests -->
+          <rect x="4" y="42" width="158" height="92" rx="12" fill="#ffffff" stroke="#d2d2d7" stroke-width="1"/>
+          <text x="83" y="78"  text-anchor="middle" font-family="-apple-system,Inter,sans-serif" font-size="13" font-weight="600" fill="#1d1d1f">Incoming</text>
+          <text x="83" y="95"  text-anchor="middle" font-family="-apple-system,Inter,sans-serif" font-size="13" font-weight="600" fill="#1d1d1f">LLM Requests</text>
+          <text x="83" y="115" text-anchor="middle" font-family="-apple-system,Inter,sans-serif" font-size="10.5" fill="#6e6e73">input + output tokens</text>
+
+          <!-- Arrow 1→2 -->
+          <line x1="162" y1="88" x2="200" y2="88" stroke="#0071e3" stroke-width="2" marker-end="url(#arch-arrow)"/>
+          <text x="181" y="80" text-anchor="middle" font-family="-apple-system,Inter,sans-serif" font-size="9" fill="#0071e3" letter-spacing="0.06em" font-weight="500">ROUTE</text>
+
+          <!-- Node 2 — Scheduler (highlighted) -->
+          <rect x="204" y="42" width="158" height="92" rx="12" fill="#ffffff" stroke="#0071e3" stroke-width="1.5"/>
+          <text x="283" y="78"  text-anchor="middle" font-family="-apple-system,Inter,sans-serif" font-size="13" font-weight="600" fill="#1d1d1f">Energy-Aware</text>
+          <text x="283" y="95"  text-anchor="middle" font-family="-apple-system,Inter,sans-serif" font-size="13" font-weight="600" fill="#1d1d1f">Scheduler</text>
+          <text x="283" y="115" text-anchor="middle" font-family="-apple-system,Inter,sans-serif" font-size="10.5" fill="#6e6e73">min marginal ΔE per GPU</text>
+
+          <!-- Arrow 2→3 -->
+          <line x1="362" y1="88" x2="400" y2="88" stroke="#0071e3" stroke-width="2" marker-end="url(#arch-arrow)"/>
+          <text x="381" y="80" text-anchor="middle" font-family="-apple-system,Inter,sans-serif" font-size="9" fill="#0071e3" letter-spacing="0.06em" font-weight="500">ASSIGN</text>
+
+          <!-- Node 3 — GPU Fleet -->
+          <rect x="404" y="42" width="158" height="92" rx="12" fill="#ffffff" stroke="#d2d2d7" stroke-width="1"/>
+          <text x="483" y="78"  text-anchor="middle" font-family="-apple-system,Inter,sans-serif" font-size="13" font-weight="600" fill="#1d1d1f">GPU Fleet</text>
+          <text x="483" y="95"  text-anchor="middle" font-family="-apple-system,Inter,sans-serif" font-size="13" font-weight="600" fill="#1d1d1f">(GPU 0 – 3)</text>
+          <text x="483" y="115" text-anchor="middle" font-family="-apple-system,Inter,sans-serif" font-size="10.5" fill="#6e6e73">eff × speed profiles</text>
+
+          <!-- Arrow 3→4 -->
+          <line x1="562" y1="88" x2="600" y2="88" stroke="#0071e3" stroke-width="2" marker-end="url(#arch-arrow)"/>
+          <text x="581" y="80" text-anchor="middle" font-family="-apple-system,Inter,sans-serif" font-size="9" fill="#0071e3" letter-spacing="0.06em" font-weight="500">EMIT</text>
+
+          <!-- Node 4 — Metrics -->
+          <rect x="604" y="42" width="152" height="92" rx="12" fill="#ffffff" stroke="#d2d2d7" stroke-width="1"/>
+          <text x="680" y="78"  text-anchor="middle" font-family="-apple-system,Inter,sans-serif" font-size="13" font-weight="600" fill="#1d1d1f">Metrics</text>
+          <text x="680" y="97"  text-anchor="middle" font-family="-apple-system,Inter,sans-serif" font-size="10.5" fill="#6e6e73">total Wh · savings %</text>
+          <text x="680" y="114" text-anchor="middle" font-family="-apple-system,Inter,sans-serif" font-size="10.5" fill="#6e6e73">makespan · CO₂e</text>
+
+          <!-- Step labels under nodes -->
+          <text x="83"  y="155" text-anchor="middle" font-family="-apple-system,Inter,sans-serif" font-size="9" fill="#0071e3" letter-spacing="0.06em" font-weight="500">① REQUEST</text>
+          <text x="283" y="155" text-anchor="middle" font-family="-apple-system,Inter,sans-serif" font-size="9" fill="#0071e3" letter-spacing="0.06em" font-weight="500">② SCHEDULE</text>
+          <text x="483" y="155" text-anchor="middle" font-family="-apple-system,Inter,sans-serif" font-size="9" fill="#0071e3" letter-spacing="0.06em" font-weight="500">③ PROCESS</text>
+          <text x="680" y="155" text-anchor="middle" font-family="-apple-system,Inter,sans-serif" font-size="9" fill="#0071e3" letter-spacing="0.06em" font-weight="500">④ REPORT</text>
+        </svg>
       </div>
     </div>
   </section>
