@@ -65,6 +65,7 @@ body {
   line-height: 1.47;
   -webkit-font-smoothing: antialiased;
   position: relative;
+  overflow-x: hidden;
 }
 
 ::selection {
@@ -667,9 +668,24 @@ code, .history-table, .big-stat-number, .big-stat-unit, .secondary-stat-value,
   will-change: opacity, transform, filter;
 }
 
+/* Directional variants — applied by animations.js so grids and stacked
+   panels cascade in from alternating sides instead of every block
+   arriving the same way. */
+.reveal.reveal-left {
+  transform: translateX(-64px);
+}
+
+.reveal.reveal-right {
+  transform: translateX(64px);
+}
+
+.reveal.reveal-zoom {
+  transform: scale(0.86);
+}
+
 .reveal.is-visible {
   opacity: 1;
-  transform: translateY(0) scale(1);
+  transform: none;
   filter: blur(0);
 }
 
@@ -1027,8 +1043,24 @@ code, .history-table, .big-stat-number, .big-stat-unit, .secondary-stat-value,
 }
 
 .info-section-alt {
+  position: relative;
+  background: none;
+  max-width: var(--page-max-width);
+}
+
+/* Full-bleed gray band behind the content, while the content itself keeps
+   the same max-width as every other section — this is what was making the
+   Methodology grid stretch edge-to-edge with nothing to break it up. */
+.info-section-alt::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 100vw;
+  transform: translateX(-50%);
   background: var(--color-canvas);
-  max-width: 100%;
+  z-index: -1;
 }
 
 .info-eyebrow {
@@ -1053,8 +1085,21 @@ code, .history-table, .big-stat-number, .big-stat-unit, .secondary-stat-value,
 
 .info-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 2rem;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.75rem 2rem;
+}
+
+/* Each block gets its own card so blocks of text read as distinct pieces
+   of information instead of one continuous wall of copy. Background flips
+   relative to the section so it always contrasts with its surroundings. */
+.info-block {
+  background: var(--color-canvas);
+  border-radius: var(--radius-cards);
+  padding: 1.5rem 1.5rem 1.75rem;
+}
+
+.info-section-alt .info-block {
+  background: var(--color-paper);
 }
 
 .info-block h3 {
@@ -1067,8 +1112,12 @@ code, .history-table, .big-stat-number, .big-stat-unit, .secondary-stat-value,
 .info-block p {
   font-size: var(--text-body-sm);
   letter-spacing: var(--tracking-body-sm);
-  line-height: 1.5;
+  line-height: 1.55;
   color: var(--color-ink-soft);
+}
+
+.info-block p + p {
+  margin-top: 0.85rem;
 }
 
 .author-bio {
@@ -1306,7 +1355,7 @@ code, .history-table, .big-stat-number, .big-stat-unit, .secondary-stat-value,
   display: inline-block;
   font-family: var(--font-sf-pro-text);
   font-size: 0.88em;
-  background: var(--color-canvas);
+  background: var(--color-cool-wash);
   color: var(--color-ink);
   padding: 0.35rem 0.75rem;
   border-radius: var(--radius-links);

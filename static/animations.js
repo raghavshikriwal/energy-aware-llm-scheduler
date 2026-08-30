@@ -81,11 +81,13 @@ function initHeroCanvas() {
 }
 
 function initScrollReveal() {
-  // Auto-tag the children of card grids as reveal items with an
-  // increasing transition-delay, so each grid cascades in rather than
-  // popping in as one flat block. Containers keep their own .reveal
-  // class (set in the HTML) for the top-level fade; this only staggers
-  // what's inside them.
+  const DIRECTIONS = ['reveal-left', 'reveal-zoom', 'reveal-right'];
+  const STAGGER_STEP_MS = 70;
+  const MAX_DELAY_MS = 420;
+
+  // Grid children cascade in with alternating left/zoom/right entrances —
+  // gives each row visual variety instead of every card arriving the same
+  // way. Applied in JS so the HTML markup doesn't need per-card classes.
   const staggerGroups = [
     '.choice-grid > .choice-card',
     '.info-grid > .info-block',
@@ -94,15 +96,40 @@ function initScrollReveal() {
     '.gpu-controls > .gpu-control-card',
   ];
 
-  const STAGGER_STEP_MS = 70;
-  const MAX_DELAY_MS = 420;
-
   staggerGroups.forEach((selector) => {
     document.querySelectorAll(selector).forEach((el, i) => {
-      el.classList.add('reveal');
+      el.classList.add('reveal', DIRECTIONS[i % DIRECTIONS.length]);
       el.style.setProperty('--reveal-delay', `${Math.min(i * STAGGER_STEP_MS, MAX_DELAY_MS)}ms`);
     });
   });
+
+  // Full-width stacked panels (sensitivity, latency, controls, the three
+  // charts, history) alternate left/right as you scroll down the
+  // dashboard, for a gentle zig-zag rather than a flat stack of fades.
+  const panelSelector = [
+    '#sensitivity-panel',
+    '#latency-panel',
+    '#controls-panel',
+    '#history-panel',
+  ].join(', ');
+  const namedPanels = document.querySelectorAll(panelSelector);
+  namedPanels.forEach((el, i) => {
+    el.classList.add(i % 2 === 0 ? 'reveal-left' : 'reveal-right');
+  });
+
+  // The three unlabeled chart-card sections (total energy / power / load)
+  // don't have ids, so pick them up as "any .chart-card.reveal not already
+  // tagged with a direction" and continue the same left/right alternation.
+  const untaggedCharts = document.querySelectorAll(
+    '.chart-card.reveal:not(.reveal-left):not(.reveal-right):not(.reveal-zoom)'
+  );
+  untaggedCharts.forEach((el, i) => {
+    el.classList.add(i % 2 === 0 ? 'reveal-right' : 'reveal-left');
+  });
+
+  // The headline number gets a confident zoom-in rather than a slide.
+  const bigStat = document.getElementById('big-stat');
+  if (bigStat) bigStat.classList.add('reveal-zoom');
 
   const revealEls = document.querySelectorAll('.reveal');
   if (!revealEls.length) return;
