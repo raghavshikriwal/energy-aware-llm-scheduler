@@ -2,48 +2,24 @@ let totalEnergyChartInstance = null;
 let powerChartInstance = null;
 let loadChartInstance = null;
 
-// Round robin (baseline) stays a neutral warm gray; energy-aware (the
-// contribution) gets the single vivid orange accent — keeps the page's
+// Round robin (baseline) stays a neutral mid-gray; energy-aware (the
+// contribution) gets the single electric-blue accent — keeps the page's
 // one-accent-color discipline instead of a two-hue comparison palette.
 const CHART_PALETTE = {
-  roundRobin: { dark: '#4a4a47', light: '#8e8b87' },
-  energyAware: { dark: '#d94f00', light: '#fa5d00' },
+  roundRobin: { dark: '#474747', light: '#707070' },
+  energyAware: { dark: '#0060c2', light: '#0071e3' },
 };
 
-const CHART_GLOW = {
-  roundRobin: 'rgba(142, 139, 135, 0.3)',
-  energyAware: 'rgba(250, 93, 0, 0.35)',
-};
-
-const CHART_GRID_COLOR = 'rgba(29, 30, 28, 0.08)';
-const CHART_TEXT_COLOR = '#615f5c';
+const CHART_GRID_COLOR = 'rgba(29, 29, 31, 0.08)';
+const CHART_TEXT_COLOR = '#707070';
 
 // Chart.js renders text/gridlines in black by default — make it match the
-// warm cream theme globally so every chart (current + future) picks this up.
+// Apple-style theme globally so every chart (current + future) picks this up.
 if (typeof Chart !== 'undefined') {
   Chart.defaults.color = CHART_TEXT_COLOR;
   Chart.defaults.borderColor = CHART_GRID_COLOR;
   Chart.defaults.font.family = "'Inter', -apple-system, BlinkMacSystemFont, sans-serif";
-
-  // Soft drop-shadow behind every bar, colored per dataset, so bars read as
-  // lit objects sitting above the panel instead of flat rectangles pasted
-  // onto it. Chart.js has no built-in shadow support, so this plugin sets
-  // the canvas shadow state right before each dataset's bars are drawn,
-  // then clears it immediately after so gridlines/tooltips stay crisp.
-  const barShadowPlugin = {
-    id: 'barShadow',
-    beforeDatasetDraw(chart, args) {
-      const colorKey = args.index === 0 ? 'roundRobin' : 'energyAware';
-      chart.ctx.save();
-      chart.ctx.shadowColor = CHART_GLOW[colorKey];
-      chart.ctx.shadowBlur = 16;
-      chart.ctx.shadowOffsetY = 8;
-    },
-    afterDatasetDraw(chart) {
-      chart.ctx.restore();
-    },
-  };
-  Chart.register(barShadowPlugin);
+  // No shadows anywhere in this system — flat bars only.
 }
 
 // Builds (and caches) a top-to-bottom gradient per canvas+color pair so
