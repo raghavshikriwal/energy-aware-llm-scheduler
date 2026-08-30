@@ -6,6 +6,7 @@ from pydantic import ValidationError
 
 from flask import Blueprint, jsonify, request
 
+from extensions import limiter
 from models.database import get_recent_runs, save_comparison_run
 from models.exceptions import InvalidGPUConfigError, TraceNotFoundError
 from models.schemas import GPUFleetConfig
@@ -22,15 +23,8 @@ from services.sensitivity import run_sensitivity_sweep
 api = Blueprint("api", __name__, url_prefix="/api")
 
 # --- Illustrative cost/carbon conversion ------------------------------------
-# These are rough, clearly-labeled reference figures (US average grid), used
-# only to make an abstract Wh number tangible. They are NOT a claim about any
-# specific data center's actual electricity contract or grid mix.
 USD_PER_KWH: float = 0.12
 KG_CO2_PER_KWH: float = 0.417
-
-# How many times larger a real production fleet might be than this demo's
-# 4-GPU / 100-request trace, purely for the "at scale" projection shown in
-# the UI. Labeled explicitly as an extrapolation, not a measurement.
 SCALE_PROJECTION_MULTIPLIER: float = 10_000
 
 
@@ -51,24 +45,11 @@ def _gpu_summary(gpus) -> list[dict]:
 
 
 def _parse_custom_gpu_config():
-    """Read optional custom GPU parameters from the POST JSON body.
-
-    Falls back to the module defaults for anything not provided, so this
-    endpoint keeps working exactly as before if the caller sends nothing.
-    Validation itself lives in models.schemas.GPUFleetConfig — this function
-    just parses the body against that schema and translates a Pydantic
-    ValidationError into our own InvalidGPUConfigError so every route
-    returns errors in the same shape (see models/exceptions.py).
-
-    Returns (efficiency_factors, compute_capabilities, num_gpus).
-    """
     body = request.get_json(silent=True) or {}
 
     try:
         config = GPUFleetConfig.model_validate(body)
     except ValidationError as e:
-        # Pydantic's default message is multi-line and implementation-y;
-        # collapse it to one readable sentence per error for the API caller.
         first_error = e.errors()[0]
         field = ".".join(str(loc) for loc in first_error["loc"]) or "body"
         raise InvalidGPUConfigError(f"{field}: {first_error['msg']}") from e
@@ -87,6 +68,7 @@ def _parse_custom_gpu_config():
 
 
 @api.route("/compare", methods=["GET", "POST"])
+@limiter.limit("10 per minute")
 def compare():
     try:
         requests_trace = load_trace()
@@ -114,12 +96,10 @@ def compare():
         compute_capabilities=compute_capabilities,
     )
 
-    # Instantaneous power snapshot (kept for the "current load" view)
     rr_power_total = sum(gpu.energy_watts for gpu in rr_gpus)
     ll_power_total = sum(gpu.energy_watts for gpu in ll_gpus)
     ea_power_total = sum(gpu.energy_watts for gpu in ea_gpus)
 
-    # Total energy to finish the workload — the physically meaningful metric
     rr_energy_total = sum(gpu.total_energy_wh for gpu in rr_gpus)
     ll_energy_total = sum(gpu.total_energy_wh for gpu in ll_gpus)
     ea_energy_total = sum(gpu.total_energy_wh for gpu in ea_gpus)
@@ -139,18 +119,11 @@ def compare():
     ll_gpu_summary = _gpu_summary(ll_gpus)
     ea_gpu_summary = _gpu_summary(ea_gpus)
 
-    # Illustrative cost/carbon framing at a hypothetical production scale.
-    # Explicitly labeled as a linear extrapolation of this demo trace, not a
-    # measurement of any real deployment.
     wh_saved_vs_rr = rr_energy_total - ea_energy_total
     projected_kwh_saved = (wh_saved_vs_rr * SCALE_PROJECTION_MULTIPLIER) / 1000
     projected_usd_saved = projected_kwh_saved * USD_PER_KWH
     projected_kg_co2_saved = projected_kwh_saved * KG_CO2_PER_KWH
 
-    # Persist this run so it shows up in /api/history.
-    # Only save on POST (an explicit user-triggered "Run Comparison"),
-    # not on every GET page-load, to avoid flooding the DB with duplicate
-    # rows from the dashboard's initial fetch.
     if request.method == "POST":
         save_comparison_run(
             energy_savings_pct=round(savings_pct, 2),
@@ -195,12 +168,7 @@ def compare():
 
 @api.route("/sensitivity")
 def sensitivity():
-    """Sweep fleet heterogeneity and return savings % at each level.
-
-    This is the data behind the "savings scale with heterogeneity" chart —
-    the strongest evidence that the 3% headline number isn't a cherry-picked
-    single point, but part of a consistent, explainable trend.
-    """
+    """Sweep fleet heterogeneity and return savings % at each level."""
     try:
         requests_trace = load_trace()
     except FileNotFoundError as e:
